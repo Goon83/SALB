@@ -1,0 +1,15 @@
+This is readme file of SALB.
+
+
+All source codes and documents in this repository are only used for academical communication.
+
+This source code repository contain the source code of PVFS2 with the SALB algorithm.
+To compile PVFS2 with SALB algorithm, you need to install GNU Scientific Library (GSL)  -- development package
+For example, for a Debian distribution: apt-get install libgsl0-dev 
+
+
+More documentations is under development.
+
+Any questions, you can contact
+Bin Dong at goon83@126.com or Bondg@cse.buaa.edu.cn
+
