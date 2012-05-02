@@ -1,0 +1,355 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>PVFS 2 Concepts: The new guy's guide to PVFS</TITLE>
+<META NAME="description" CONTENT="PVFS 2 Concepts: The new guy's guide to PVFS">
+<META NAME="keywords" CONTENT="concepts">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="concepts.css">
+
+<? include("../../../../header.php"); ?></HEAD>
+
+<?include("../../../..//top.php"); ?> <body id="documentation">
+<H1 ALIGN="LEFT">PVFS 2 Concepts: The new guy's guide to PVFS</H1>
+<DIV CLASS="author_info">
+
+<P ALIGN="LEFT"><STRONG>PVFS Development Team</STRONG></P>
+</DIV>
+
+<P>
+<PRE>$Id: concepts.tex,v 1.3 2006/09/13 20:22:43 vilayann Exp $
+</PRE>
+<H1><A NAME="SECTION00010000000000000000">
+<SPAN CLASS="arabic">1</SPAN> Introduction</A>
+</H1>
+
+<P>
+PVFS2 represents a complete redesign and reimplementation of the
+parallel file system concepts in PVFS1.  PVFS2 has new entities acting
+in new ways on new objects.  This document will serve as an introduction
+to the terminology and concepts used in the other pvfs2 documents.
+
+<P>
+
+<H1><A NAME="SECTION00020000000000000000">
+<SPAN CLASS="arabic">2</SPAN> Words</A>
+</H1>
+<DL>
+<DT><STRONG><EM>system interface</EM></STRONG></DT>
+<DD>low-level interface to PVFS.  sits on top of
+    the servers.  provides underlying foundation to higher-level
+    interfaces like the PVFS library ( libpvfs2 ) and the PVFS VFS
+    interface. 
+</DD>
+<DT><STRONG><EM>distributions</EM></STRONG></DT>
+<DD>(also ``file distributions'', ``physical
+    distribution'' ) set
+    of methods describing a mapping from a logical sequence of bytes to
+    a physical layout of bytes on PVFS servers.  PVFS1 had one type of
+    distribution -  regularly striding data.  PVFS2 will understand
+    many distributions, including but not limited to strided, block and
+    cyclic. 
+
+<P>
+</DD>
+<DT><STRONG><EM>job </EM></STRONG></DT>
+<DD>a PVFS operation requires several steps, called ``jobs''
+<DL>
+<DT><STRONG><EM>job interface</EM></STRONG></DT>
+<DD>keeps track of progress as an operation
+   makes its way through the pvfs2 layers
+  
+</DD>
+<DT><STRONG><EM>job structure</EM></STRONG></DT>
+<DD>
+</DD>
+</DL>
+
+<P>
+</DD>
+<DT><STRONG><EM>BMI (Buffered Message Interface)</EM></STRONG></DT>
+<DD>abstracts network communication.  
+   Currently BMI supports
+   TCP, Myricom/GM, and InfiniBand using either VAPI or OpenIB APIs.
+   It has been extended to at least two other protocols not included in the
+   distribution.
+
+<P>
+</DD>
+<DT><STRONG><EM>flows</EM></STRONG></DT>
+<DD>a flow describes the movement of file data from client
+   initialization to putting bits on disk.  It encompasses both
+   transporting data over the network as well as interacting with
+   storage devices. ( XXX: scheduler?).  Users tell flow <EM>what</EM> they
+   want done, and flow figures out <EM>how</EM> to accomplish the request.
+   Flows are not involved in metadata operations.
+   <DL>
+<DT><STRONG><EM>flow interface</EM></STRONG></DT>
+<DD>the API for setting up flows
+   
+</DD>
+<DT><STRONG><EM>flow protocol</EM></STRONG></DT>
+<DD>Implements whatever underlying protocol is
+   needed for two endpoints to communicate
+   
+</DD>
+<DT><STRONG><EM>flow endpoint</EM></STRONG></DT>
+<DD>the source or destination of a flow 
+   
+</DD>
+<DT><STRONG><EM>flow descriptor</EM></STRONG></DT>
+<DD>data structure representing a flow
+   
+</DD>
+</DL>
+
+<P>
+</DD>
+<DT><STRONG><EM>trove </EM></STRONG></DT>
+<DD>stores both keyword-value pairs and data (?)
+<DL>
+<DT></DT>
+<DD><EM>storage interface (obsolete)</EM> now called <EM>trove</EM>
+</DD>
+</DL>
+
+<P>
+</DD>
+<DT><STRONG><EM>system level objects </EM></STRONG></DT>
+<DD>data files, metadata files,
+  directories, symlinks
+  <DL>
+<DT><STRONG><EM>metadata</EM></STRONG></DT>
+<DD>data about data. in the UNIX sense, such things as
+      owner, group, permissions, timestamps, sizes.  in the PVFS sense,
+      also distribution information.
+    
+</DD>
+<DT><STRONG><EM>data</EM></STRONG></DT>
+<DD>actual contents of file
+    
+</DD>
+<DT><STRONG><EM>metafile</EM></STRONG></DT>
+<DD>contains the metadata for a single PVFS file
+    
+</DD>
+<DT><STRONG><EM>datafile</EM></STRONG></DT>
+<DD>contains some portion of the data for a single PVFS
+        file
+  
+</DD>
+</DL>
+</DD>
+<DT><STRONG><EM>dataspace</EM></STRONG></DT>
+<DD>logical collections of data 
+	<DL>
+<DT><STRONG><EM>bytestream</EM></STRONG></DT>
+<DD>arbitrary binary data.  Data is accessed
+	with sizes from offsets.
+	
+</DD>
+<DT><STRONG><EM>keyval </EM></STRONG></DT>
+<DD>a keyword/value pair. Data is accessed by
+	resolving a key.
+	
+</DD>
+</DL>
+</DD>
+<DT><STRONG><EM>collections </EM></STRONG></DT>
+<DD>
+</DD>
+<DT><STRONG><EM>server request protocol</EM></STRONG></DT>
+<DD>
+</DD>
+<DT><STRONG><EM>vtags </EM></STRONG></DT>
+<DD>provides a version number for any region of a byte stream 
+    or any individual key/value pair.  By comparing the vtag before and
+    after an operation, one can ensure consistency.  
+</DD>
+<DT><STRONG><EM>handle</EM></STRONG></DT>
+<DD>a 64-bit tag to uniquely identify PVFS objects.
+  Re-using handles brings up some ``interesting'' cases.   (aside: what
+  if we made the handles 128 bits )
+</DD>
+<DT><STRONG><EM>instance tag</EM></STRONG></DT>
+<DD>in some cases, a handle might refer to two
+  distinct files with the same name.  The <TT>instance tag</TT> serves as
+  an extra identifier to help ensure consistency
+</DD>
+<DT><STRONG><EM>pinode</EM></STRONG></DT>
+<DD>A mechanism for associating information with a handle.  
+  Like a linux inode, a <TT>pinode</TT> contains information used by PVFS2
+  internally.  
+
+<P>
+</DD>
+<DT><STRONG><EM>gossip </EM></STRONG></DT>
+<DD>A logging library.  Internal to clemson?  freshmeat
+doesn't have an entry for it, and searching for ``gossip logging
+library'' in google turns up a ton of irrelevant searches.
+</DD>
+</DL>
+
+<P>
+
+<H1><A NAME="SECTION00030000000000000000">
+<SPAN CLASS="arabic">3</SPAN> The view from 10,000 feet</A>
+</H1>
+
+<P>
+Refer to figure <A HREF="#fig:interface-model">1</A> for an idea of how the words above
+fit together.
+
+<P>
+All end-user access to PVFS will still be provided by one of several
+front ends (VFS kernel interface, ROMIO, libpvfs) ( <I>what's the
+right term here?  API, FE, interface?</I>).  The new pvfs library has not
+been written yet, but there is a good chance it will be largely similar
+to the current pvfs library.  The ROMIO and VFS interfaces should remain
+largely unchanged to the end user, aside from extensions to take
+advantage of new PVFS2 features.
+
+<P>
+The end-user interfaces converge at the system interface.  If a user
+request requires talking to several servers, the system interface
+submits a job request for each server to the job manager ( <I>i
+presume, if the job mgr can't split up requests that the submission of
+multiple jobs happens in the sys-int.  or will the client find out who
+he has to talk to after opening the file?</I>).  Requests for
+large or noncontiguous data chunks only need one job as explained below.
+
+<P>
+The job manager is a fairly thin layer between the system interface and
+BMI, trove, and flow.  It should be noted that nearly every request
+requires multiple steps ( communicate over the network, read bytes from
+storage ...), and each step becomes a job. The job manager provides a
+common handle space (terminology?) and thread management to keep
+everything progressing.
+
+<P>
+If the user performs a data operation, the system interface will submit
+a flow job.  The system interface knows what <EM>has</EM> to happen - some
+bytes from here have to go over there.  The flow job figures out <EM>how</EM>
+to accomplish the request.  The flow can compute how much data comes from
+which servers based on the I/O request and the distribution parameters.
+The flow then is responsible for making the right BMI calls to keep the
+i/o request progressing. 
+
+<P>
+Metadata requests go directly to BMI jobs.  ... (<EM>client requests
+will never go directly to trove, right? </EM>)
+
+<P>
+Wind back up the protocol stack to the servers for a moment.  We'll
+come back to BMI in a bit.   From the client side, all jobs are
+``expected'': the client asks for something to happen and can test for
+completion of that job.  PVFS2 servers can additionally receive
+``unexpected'' jobs, generally (always?) when a client initiates a
+request from a server.  (<EM>where can i find more information about
+the ``request handler'' and the ``op state machine'' in
+figure <A HREF="#fig:interface-model">1</A> ?</EM> ) 
+
+<P>
+The job manager works the same way for the server as it does for the
+client, keeping track of BMI, trove, and flow jobs.  
+
+<P>
+Figure <A HREF="#fig:setmeta-protocol">2</A> shows a setmeta operation.  The client
+starts a BMI job to send a request to the meta server.  The server then
+receives a job indicating that an unexpected BMI message has arrived.
+The server then issues a Trove job to store the metadata, and issues a
+BMI Job to send an ack.  The client does a BMI job to receive the ack. 
+A setmeta requires 2 jobs on the client side (send request, receive          
+ack), and 3 jobs on the server side (receive request, do meta operation,        
+send ack).  <EM>(hrm? so ``unexpected'' isn't completely true? the
+server expects a request enough to post a receive )</EM>
+
+<P>
+Data operations are largely similar to metadata operations:
+the client posts jobs to send the request and receive the response, the
+server posts jobs to receive the request, do the operation, and send an
+ack.  The difference is that a flow does the work of moving data. ( XXX:
+i have a figure for this.  is this type of figure useful? )
+
+<P>
+Jobs and flows use BMI abstractions anytime they have to communicate
+over the network.  The BMI level resolves these abstract "connections"
+into real network activity.  BMI will either open a TCP socket, do some
+GM magic, or do whatever the underlying system network needs done to
+move bytes. 
+
+<P>
+Similarly, jobs and flows use trove abstractions and let trove deal with
+the actual storage of bytestream and keyval objects
+
+<P>
+
+<DIV ALIGN="LEFT"><A NAME="fig:interface-model"></A><A NAME="65"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 1:</STRONG>
+PVFS2 components</CAPTION>
+<TR><TD>
+<DIV ALIGN="LEFT">
+
+</DIV><IMG
+ WIDTH="281" HEIGHT="209" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="\includegraphics[scale=0.25]{interface-model.eps}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV ALIGN="LEFT"><A NAME="fig:setmeta-protocol"></A><A NAME="66"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 2:</STRONG>
+PVFS2 setmeta operation</CAPTION>
+<TR><TD>
+<DIV ALIGN="LEFT">
+
+</DIV><IMG
+ WIDTH="594" HEIGHT="244" ALIGN="BOTTOM" BORDER="0"
+ SRC="img2.png"
+ ALT="\includegraphics[scale=0.5]{setmeta-protocol.eps}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H1><A NAME="SECTION00040000000000000000">
+About this document ...</A>
+</H1>
+ <STRONG>PVFS 2 Concepts: The new guy's guide to PVFS</STRONG><P>
+This document was generated using the
+<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 2002-2-1 (1.71)
+<P>
+Copyright &#169; 1993, 1994, 1995, 1996,
+Nikos Drakos, 
+Computer Based Learning Unit, University of Leeds.
+<BR>
+Copyright &#169; 1997, 1998, 1999,
+<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
+Mathematics Department, Macquarie University, Sydney.
+<P>
+The command line arguments were: <BR>
+ <STRONG>latex2html</STRONG> <TT>-split 0 -show_section_numbers -nonavigation concepts.tex</TT>
+<P>
+The translation was initiated by Samuel Lang on 2010-02-04
+<BR><HR>
+<ADDRESS>
+Samuel Lang
+2010-02-04
+</ADDRESS></table></table></table><?include("../../../../bottom.php"); ?>
+</BODY>
+</HTML>

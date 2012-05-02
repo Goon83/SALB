@@ -1,0 +1,1045 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>BMI Document</TITLE>
+<META NAME="description" CONTENT="BMI Document">
+<META NAME="keywords" CONTENT="bmi-design">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="bmi-design.css">
+
+</HEAD>
+
+<BODY >
+
+<P>
+<H1 ALIGN="CENTER">BMI Document</H1>
+<DIV CLASS="author_info">
+
+<P ALIGN="CENTER"><STRONG>PVFS Development Team</STRONG></P>
+<P ALIGN="CENTER"><STRONG>July 2002</STRONG></P>
+</DIV>
+
+<P>
+
+<H1><A NAME="SECTION00010000000000000000">
+<SPAN CLASS="arabic">1</SPAN> TODO</A>
+</H1>
+
+<P>
+
+<UL>
+<LI>maybe change method nomenclature to module
+</LI>
+<LI>no longer do size mathing
+</LI>
+<LI>test/wait nomenclature and semantics
+</LI>
+</UL>
+
+<P>
+Stuff from discussions with Pete:
+
+<P>
+
+<UL>
+<LI>give a strict definition for ``completion''.  we do local
+completion in MPI sense (completion means safe to reuse buffer).
+User can build barrier to get non local completion.
+</LI>
+<LI>encourage preposting and discuss why
+</LI>
+<LI>discuss a little bit how flows fit in, what real purpose of
+bmi is
+</LI>
+</UL>
+
+<P>
+
+<H1><A NAME="SECTION00020000000000000000">
+<SPAN CLASS="arabic">2</SPAN> Introduction</A>
+</H1>
+
+<P>
+This document describes the design and use of the Buffered Message
+Interface (BMI).  BMI is a network abstraction layer that will form the
+basis for communication between components of the Parallel Virtual File
+System Version 2.  It is a simple message oriented communications
+library that includes features that are particularly useful for
+low level parallel I/O operations.
+
+<P>
+All request protocol messages exchanged between clients and
+servers in PVFS2 will be transferred using BMI.
+
+<P>
+Actual file data transferred in PVFS2 will be sent using the flow
+interface (see related documents).  The default flow
+implementation will also use BMI as an underlying transport, but
+advanced implementations may elect to bypass it.
+
+<P>
+
+<H1><A NAME="SECTION00030000000000000000">
+<SPAN CLASS="arabic">3</SPAN> Related Documents</A>
+</H1>
+
+<P>
+
+<UL>
+<LI>pvfs2-design-storageint: outlines the Trove interface, which
+is a low storage device interface used by PVFS2.  
+</LI>
+<LI>pvfs2-design-flow: outlines the flow interface.  Flows are
+used to represent transfers that involve both network and storage.
+It also brings together scheduling, physical distribution, and I/O request
+processing for this environment.  The default flow implementation
+uses BMI and Trove as underlying access mechanisms.
+</LI>
+<LI>pvfs2-design-job: covers the high level glue layer that
+pulls the flow, BMI, trove, and scheduling interfaces together
+into a coherent framework.
+</LI>
+<LI>pvfs2-design-concepts: general definitions and overview of
+PVFS2.
+</LI>
+</UL>
+
+<P>
+
+<H1><A NAME="SECTION00040000000000000000"></A>
+<A NAME="sec:high"></A>
+<BR>
+<SPAN CLASS="arabic">4</SPAN> High level design
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION00041000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">1</SPAN> Features and Goals</A>
+</H2>
+
+<P>
+
+<UL>
+<LI>simple API
+</LI>
+<LI>modularity
+</LI>
+<LI>efficiency
+</LI>
+<LI>support for multiple simultaneous networks
+</LI>
+<LI>client/server model
+</LI>
+<LI>supports discontiguous memory regions
+</LI>
+<LI>hooks for obtaining information for scheduling
+</LI>
+<LI>message based, reliable, ordered delivery
+</LI>
+<LI>misc. features tailored to parallel I/O
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION00042000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">2</SPAN> Implementation</A>
+</H2>
+
+<P>
+BMI has been implemented as a user level library with 
+modules to support various network protocols.  Although designed for use
+with PVFS2, BMI is an independent library which may be useful in other
+environments as well.
+
+<P>
+BMI provides reliability, message ordering, and flow control.  If a
+particular underlying protocol does not provide one of these features,
+then BMI is responsible for implementing it.
+
+<P>
+Currently all modules are added to BMI statically at compile time.
+These could be implemented as runtime loadable modules if
+needed, however.
+
+<P>
+
+<H2><A NAME="SECTION00043000000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">3</SPAN> Communications model</A>
+</H2>
+
+<P>
+All communications operations in BMI are nonblocking.  In order to send a
+message, the user must first <SPAN  CLASS="textit">post</SPAN> the message to the interface,
+then <SPAN  CLASS="textit">test</SPAN> it for completion.  The same holds for receiving
+messages.  Once testing indicates that a message has completed, the
+user must check the status of the message in order to determine if it
+completed successfully or not.  Partial completion is not allowed.
+
+<P>
+Most functions defined as part of the BMI interface are nonblocking.
+Each function may perform work before completing, but this work is
+guaranteed to complete within a bounded amount of time.  This restriction
+implies that it may be necessary to test for completion of a message
+several times before it actually completes.  There is no mechanism
+that allows the interface to ``wait'' indefinitely for completion of
+a particular operation.  This design decision was made because blocking
+network calls (especially in large parallel systems) are prone to problems
+with robustness and scalability.  They may cause an application to hang
+in the event of network or programming errors.  This is not acceptable
+within low level system services.
+
+<P>
+When posting receive operations, the user must specify the address of
+the sending host and the size of the message to accept.  The user cannot
+post receives that match wildcard addresses.  The only exceptions to
+this rule are unexpected messages, as defined in section
+<A HREF="#sec:unexp">5.2</A>.
+
+<P>
+BMI is a connectionless interface; the user does not have to establish
+or maintain any link between hosts before sending messages.  The BMI
+implementation may maintain connections internally if needed for a
+particular network device, but such details are not exposed to the user.
+
+<P>
+
+<H2><A NAME="SECTION00044000000000000000"></A>
+<A NAME="sec:arch"></A>
+<BR>
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">4</SPAN> Architecture
+</H2>
+
+<P>
+The overall architecture of BMI is shown in Figure <A HREF="#fig:bmi-arch">1</A>.
+Support for individual network protocols is provided by BMI
+<SPAN  CLASS="textit">methods</SPAN>.  There may be any number of methods active at a given
+time.  This collection of methods is managed by the <SPAN  CLASS="textit">method control
+layer</SPAN>.  The method control layer is also responsible for presenting the
+top level BMI interface to the application.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="fig:bmi-arch"></A><A NAME="196"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 1:</STRONG>
+BMI Architecture</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="324" HEIGHT="330" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="\includegraphics[scale=0.4]{bmi-arch-color.eps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H3><A NAME="SECTION00044100000000000000"></A>
+<A NAME="method-control-intro"></A>
+<BR>
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">1</SPAN> Method control
+</H3>
+
+<P>
+From a high level, the method control layer is responsible for
+orchestrating network operations and managing the network methods.
+This includes several responsibilities, including address resolution,
+method multiplexing, and providing a stable BMI user interface.  It also
+provides a library of support functions that may be useful to method
+implementors.
+
+<P>
+One of the most important tasks of the method control layer is the
+multiplexing of network methods.  When an operation is
+posted by the user, it is up to the method control to decide which
+method will service the operation.  Likewise, when the user tests for
+completion, the method control must test the appropriate methods for
+the operations of interest.
+
+<P>
+The method control layer provides the BMI user interface.  This is
+the API used by applications that communicate using BMI.  The BMI
+interface functions are converted into the appropriate low level method
+requests that are needed to complete operations.
+
+<P>
+Address resolution is the final major responsibility of the method
+control.  The method control manages the BMI level addresses and makes
+sure that the
+name space is consistent to the user, regardless of which methods are
+in use.  It does so by maintaining an internal <SPAN  CLASS="textit">reference list</SPAN> for
+addresses.  Each network address has a unique reference that provides
+mappings between BMI user level addresses, the string representation
+of addresses, and the method specific representation of addresses.
+The BMI user level addresses are handles for network hosts that the
+application uses when calling BMI functions.  The string representation
+is the ASCII host name of the hosts before they are resolved by BMI (as
+read from a ``hosts'' file, for example).
+Finally, the method address is the representation that that methods use
+for identifying hosts, which may contain information specific
+to that particular protocol.  Note that method addresses are never,
+under any circumstances, exposed to the application.  They are
+reserved for internal BMI use only.
+
+<P>
+
+<H3><A NAME="SECTION00044200000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">2</SPAN> Methods</A>
+</H3>
+
+<P>
+Each method is implemented as a statically compiled module.  This
+module must provide (and strictly adhere to) a predefined <SPAN  CLASS="textit">method
+interface</SPAN>.  It supports reliable, ordered delivery and flow control for
+the protocol that it controls.  Aside from meeting these semantics and
+adhering to the method interface, there are no other restrictions on
+how the method should be implemented.  Support libraries are provided
+for certain features that are common to many methods, but their use
+is optional.
+
+<P>
+Each method is responsible for maintaining the collection of
+operations that it is working on, usually through operation queues.
+These collections of operations are private to each method.
+
+<P>
+
+<H3><A NAME="SECTION00044300000000000000">
+<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">4</SPAN>.<SPAN CLASS="arabic">3</SPAN> Thread safety</A>
+</H3>
+
+<P>
+The top level BMI user interface is thread safe.  This means that
+it is legal for more than one thread to make concurrent BMI calls,
+as long as those calls do not manipulate the same data structures
+or operations.  For example, one thread may handle BMI messages to
+carry out I/O, while another thread handles BMI messages to
+exchange requests and acknowledgements.
+
+<P>
+The BMI methods do not need to be thread safe.  The method control
+layer will serialize any calls to a single method so that it is
+protected.  This should ease the process of implementing new
+methods.
+
+<P>
+
+<H1><A NAME="SECTION00050000000000000000">
+<SPAN CLASS="arabic">5</SPAN> Concepts</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION00051000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">1</SPAN> Memory buffers</A>
+</H2>
+
+<P>
+The user must specify a memory buffer to use when posting send or
+receive operations.  This buffer may be a normal memory region, or it
+may be a buffer that was allocated using BMI memory management functions.
+If the user elects to allocate the memory using the BMI facilities, then
+BMI has the opportunity to optimize the buffer for the type of network
+being used.  This mode of operation is preferred for achieving optimal
+performance.  However, normal memory buffers are also allowed in order
+to better support certain scenarios common to file system operations.
+Some file system operations act upon existing memory regions (for example,
+the client side Unix read() system call).  In these situations, we would
+like to avoid imposing a buffer copy, and instead give the BMI layer
+the flexibility to handle the buffer at a lower level if possible.
+
+<P>
+If a memory buffer is allocated using BMI function calls, then it must
+also be deallocated using BMI.  These buffers are not guaranteed to be
+manageable by standard operating system libraries.
+
+<P>
+
+<H2><A NAME="SECTION00052000000000000000"></A>
+<A NAME="sec:unexp"></A>
+<BR>
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">2</SPAN> Unexpected messages
+</H2>
+
+<P>
+BMI's default mode of operation requires that each send operation be
+matched with a certain receive operation at the remote host in order to
+complete.  This send and receive operation must match in terms of expected
+message size (more on this in section <A HREF="#sec:short">5.3</A>), host address,
+and identication tag.  Otherwise the communication will not complete.
+There is no mechanism for receiving from a ``wildcard'' address.
+
+<P>
+However, in order to loosen this restriction, 
+BMI provides a special class of messages called <SPAN  CLASS="textit">unexpected
+messages</SPAN>.   This type of message is sent without the receiving host 
+explicitly requesting the communication. 
+In other
+words, the receiving host does not post a matching receive for this
+type of message.  Instead, it must periodically check to see if any
+unexpected messages have arrived in order to receive them successfully.
+This is the equivalent of ``listening'' for new requests in a more
+traditional
+networking system.  Unexpected messages may come from any host on the
+network.  Communication between two hosts is typically initiated
+by one of the hosts sending an unexpected message to the other. 
+
+<P>
+Unexpected messages may be of any size less than a limit defined by the
+interface.  When an unexpected message arrives, BMI will provide a
+buffer for it.  This buffer is passed to the receiving process when it
+checks to see if unexpected messages have arrived.  It is the
+responsibility of the caller to eventually free this buffer using
+the normal system free() function.
+
+<P>
+
+<H2><A NAME="SECTION00053000000000000000"></A>
+<A NAME="sec:short"></A>
+<BR>
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">3</SPAN> Short messages
+</H2>
+
+<P>
+The BMI interface does not allow partial completion of messages.
+However, it does allow for a sender to send less data than
+the receiver anticipated, resulting in what may be thought of as
+``short'' messages from the receiver's point of view.  Short
+messages <SPAN  CLASS="textit">do not</SPAN> indicate that another receive is needed to
+obtain the rest of the message.  Instead it means that the
+sender does not have as much data to transmit as the receiver was
+expecting it to.  In practice, this tends to occur in file systems
+when a read operation reaches EOF.  It may also be a common
+occurance in request protocol operations, when requests may be of
+variable size and we do not wish to negotiate the correct size of
+messages before transmitting.
+
+<P>
+When a short send is posted, the sender must indicate the size
+that the receiver was expecting.  This is necessary for the
+message to be matched properly between sender and receiver.  When
+the receive completes, the caller is notified of how much data was
+actually present in the message.
+
+<P>
+
+<H2><A NAME="SECTION00054000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">4</SPAN> Immediate completion</A>
+</H2>
+
+<P>
+The default model for each network operation is to first post it and
+then test for completion.  However, there are often instances in which
+operations can complete immediately (during the post procedure) and thus
+do not require the extra test step.  Examples of this occur when TCP
+sockets buffers are large enough to allow a message to be sent in one step
+without blocking.  This may also occur on the receive side of
+communications if the required data has already been buffered by the BMI
+library when the receive operation is posted.
+
+<P>
+In these situations, it would be good to avoid the overhead of
+needlessly calling the test function.  We therefore allow
+<SPAN  CLASS="textit">immediate completion</SPAN> from any post function.  Immediate
+completion is indicated from post functions by a return value of one.
+BMI library users should always check this return value so that they are
+aware of opportunities to skip the test phase of communication.
+
+<P>
+
+<H2><A NAME="SECTION00055000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">5</SPAN> User pointers</A>
+</H2>
+
+<P>
+BMI is intended to be used in an enviroment in which many
+operations are in flight at once.  Several
+operations may be posted at different times for different tasks,
+with completion following later in a test() or wait() call.
+This sometimes makes it challenging to map the completion of an
+operation back to the higher level operation or state that the
+user was trying to carry out.
+
+<P>
+BMI includes the concept of ``user pointers'' to help with this
+problem.  A user pointer is a void* passed in to message post
+functions, which is returned to the user when the message
+completes.  The caller may use these pointer fields for any
+purpose.  Typically it will be useful as a mechanism to map back
+to a higher level state without having to search through a queue
+of operations that are currently in flight.  If used properly,
+user pointers eliminate the need for the caller to keep track of
+operation id's for any reason other than for calling test()
+functions.
+
+<P>
+
+<H2><A NAME="SECTION00056000000000000000">
+<SPAN CLASS="arabic">5</SPAN>.<SPAN CLASS="arabic">6</SPAN> List I/O</A>
+</H2>
+
+<P>
+BMI provides seperate API functions for posting contiguous and
+noncontiguous buffers for communication.   Noncontiguous buffers
+are represented as arrays of buffer pointers and sizes, and are
+handled by functions with the <SPAN  CLASS="textit">_list</SPAN> suffix.
+
+<P>
+List I/O is useful when a user wishes to send from or receive data
+into multiple memory regions using a single network message.  This
+is convenient for mapping network I/O to parallel I/O access patterns.
+
+<P>
+Messages posted using the list interface are completely compatible
+with contiguous messages on the peer side.  Regions do not have to
+match between sender and receiver, nor do they both have to be
+discontiguous.  The aggregate size of the message does need to
+match, however.
+The list functions support all of the features of the ``normal''
+API, including short messages.
+
+<P>
+The intention is for method level support of list messages to be
+optional; if a method does not implement this functionality, then
+the method control layer of BMI will emulate it by packing and
+unpacking regions using contiguous intermediate buffers.  This is
+obviously a performance penalty, but will ensure correct behavior
+when a native method cannot easily handle discontiguous memory
+regions.
+
+<P>
+
+<H1><A NAME="SECTION00060000000000000000"></A>
+<A NAME="sec:user"></A>
+<BR>
+<SPAN CLASS="arabic">6</SPAN> User interface
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION00061000000000000000">
+<SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">1</SPAN> Types and structures</A>
+</H2>
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">Message tags</SPAN>:  Message tags are numerical values that may
+be associated with messages to be sent or received using BMI.  The
+sending and receiving process must use matching tags in order for a
+given communication to complete.  Unexpected messages are the only
+exception; in that case only the sender must specify a tag.  
+
+<P>
+Tags provide a mechanism for PVFS to differentiate between various
+messages and associate them with specific tasks.
+
+<P>
+</LI>
+<LI><SPAN  CLASS="textbf">ID's</SPAN>:  ID's are opaque handles that a caller may use to
+keep track of operations that are currently in progress.  ID's are
+assigned by BMI when an operation is posted and then used in subsequent tests
+to determine if the operation has completed.
+
+<P>
+</LI>
+<LI><SPAN  CLASS="textbf">unexpected_info</SPAN>: This is a struct used to
+describe incoming unexpected messages.  It is filled in by the
+testunexpected() and waitunexpected() calls (see below).
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION00062000000000000000">
+<SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">2</SPAN> Interface functions</A>
+</H2>
+
+<P>
+The BMI interface can be separated into categories as follows:  message
+initiation, message testing, memory management, list I/O, and utilities. 
+
+<P>
+The message initiation functions are used by an application to 
+request the sending or receiving of network buffers:
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">BMI_post_send()</SPAN>: Posts a send operation.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_post_recv()</SPAN>: Posts a receive operation.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_post_sendunexpected()</SPAN>: Posts a send operation
+that was not expected by the receiving process.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_unpost()</SPAN>: Unposts a previously submitted
+operation.  <SPAN  CLASS="textit">This is a blocking call.</SPAN>
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_addr_lookup()</SPAN>: Converts the string
+representation of a BMI address (in url-like form) into an opaque
+BMI addr type.
+</LI>
+</UL>
+
+<P>
+The message testing functions are used to check for completion of
+network operations:
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">BMI_test()</SPAN>: Tests for completion of a single
+operation.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_testsome()</SPAN>: Tests for completion of any of a
+specified set of operations.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_testunexpected()</SPAN>: Tests for arrival of any
+unexpected messages.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_wait()</SPAN>:  Tests for completion of a single
+operation; is allowed to block briefly if no work is available.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_waitsome()</SPAN>: Tests for completion of any of a
+specified set of operations; is allowed to block briefly if no
+work is available.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_waitunexpected()</SPAN>: Tests for completion of any
+of a specified set of operations; is allowed to block briefly if
+no work is available.
+</LI>
+</UL>
+
+<P>
+The BMI memory management functions are used to control memory buffers
+that are optimized for use with BMI:
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">BMI_memalloc()</SPAN>:  Creates a new buffer. 
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_memfree()</SPAN>:  Destroys a buffer previously
+created with BMI_memalloc().
+
+<P>
+</LI>
+</UL>
+
+<P>
+The list I/O functions are very similar to the message initiation
+functions.  However, they allow the caller to express buffers as
+arrays of discontiguous regions
+
+<P>
+Note that each of these functions requires the caller to pass in
+an array of pointers and sizes to use as I/O targets.  These
+arrays must not be freed or modified until completion of the
+requested operation (they are not copied by the BMI interface).
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">BMI_post_send_list()</SPAN>:  Same as BMI_post_send,
+except that it allows the caller to specify an array of buffers
+and sizes to send from.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_post_recv_list()</SPAN>:  Same as BMI_post_recv,
+except that it allows the caller to specify an array of buffers
+and sizes to receive into.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_post_sendunexpected_list()</SPAN>:  Same as
+BMI_post_sendunexpected(), execept that it allows the caller to
+specify an array of buffers and sizes to send from.
+</LI>
+</UL>
+
+<P>
+The final collection of functions perform various utility tasks that are
+not directly involved in network I/O:
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">BMI_initialize()</SPAN>:  Starts the BMI interface; must
+be called prior to any other BMI functions.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_finalize()</SPAN>:  Shuts down the BMI interface.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_set_info()</SPAN>:  Sets optional BMI parameters.
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_get_info()</SPAN>:  Reads optional BMI parameters.
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H3><A NAME="SECTION00062100000000000000">
+<SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN> Supported getinfo and setinfo options</A>
+</H3>
+
+<P>
+
+<UL>
+<LI>BMI_DROP_ADDR: This is a hint which may be passed to
+set_info.  It tells the interface that no further communication
+will be requested of the specified address, and that it should be
+discarded.  <SPAN  CLASS="textit">NOTE: this option will almost certainly be
+deprecated or replaced soon</SPAN>
+</LI>
+<LI>BMI_CHECK_INIT: This is a query to get_info which simply
+checks to see if the BMI interface has been properly initialized
+or not.
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION00063000000000000000">
+<SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">3</SPAN> Error handling</A>
+</H2>
+
+<P>
+Errors may be reported from BMI in one of two ways:
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textit">Return value of API function</SPAN>:  If an API function
+returns a value less than zero, it indicates that the function
+failed.  This is an indication of a critical internal error that
+is not particular to any specific operation.
+</LI>
+<LI><SPAN  CLASS="textit">Operation error code</SPAN>:  This is a value filled in upon
+completion of an operation.  If less than zero, it indicates that
+the operation in question failed, but that the BMI interface as a
+whole is working properly.
+</LI>
+</UL>
+
+<P>
+Both types of error codes for the time being consist of -errno
+values.  This is not really expressive enough for long term use,
+but at least gives a general idea of the type of failure for now.
+
+<P>
+
+<H1><A NAME="SECTION00070000000000000000"></A>
+<A NAME="sec:methguide"></A>
+<BR>
+<SPAN CLASS="arabic">7</SPAN> Method implementation
+</H1>
+
+<P>
+The method interface is very similar to the BMI user interface.
+It implements roughly the same functions. However, it includes minor
+variations that take into account the fact that operations at this level
+are targeted for a single specific method.
+
+<P>
+
+<H2><A NAME="SECTION00071000000000000000">
+<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">1</SPAN> Method interface</A>
+</H2>
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">BMI_method_initialize()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_finalize()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_post_send()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_post_sendunexpected()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_post_recv()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_unpost()</SPAN>: 
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_addr_lookup()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_test()</SPAN>: 
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_testsome()</SPAN>: 
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_testunexpected()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_wait()</SPAN>: 
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_waitsome()</SPAN>: 
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_waitunexpected()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_memalloc()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_memfree()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_set_info()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_get_info()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_post_send_list()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_post_sendunexpected_list()</SPAN>:
+</LI>
+<LI><SPAN  CLASS="textbf">BMI_method_post_recv_list()</SPAN>:
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION00072000000000000000">
+<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">2</SPAN> Important structures</A>
+</H2>
+
+<P>
+There are three major structures that are manipulated at the BMI
+method level API:
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">method_op</SPAN>:  This structure is used to keep track
+of pending operations.  It includes several generic fields which
+should apply to almost any method, as well as a private area which
+may be used internally by methods for storage of parameters.
+</LI>
+<LI><SPAN  CLASS="textbf">method_addr</SPAN>:  This structure is used to describe
+network addresses at the method level.  Like the method_op
+structure, it has both generic and private sections.
+</LI>
+<LI><SPAN  CLASS="textbf">method_unexpected_info</SPAN>: This structure describes
+incoming unexpected messages.  It is filled in during
+testunexpected(), and converted into information to be passed to
+the BMI user by the method control layer.
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION00073000000000000000"></A>
+<A NAME="sec:support"></A>
+<BR>
+<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">3</SPAN> Support libraries
+</H2>
+
+<P>
+The BMI library provides several support functions which may aid
+method programmers when implementing support for new protocols.  Each
+method can expect these functions to be visible to it once it has been
+linked into the library.
+These functions are
+intended to be as generic as possible so that they may be used by a
+variety of different methods.
+
+<P>
+
+<H3><A NAME="SECTION00073100000000000000">
+<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">1</SPAN> Operation queues</A>
+</H3>
+
+<P>
+Every prototype method implemented so far makes use of FIFO queues to
+keep track of pending operations.  Operations are described by generic
+operation structures that include common parameters (such as buffer
+size and location).  This structure also includes abstract storage space
+for private method specific parameters (such as flow control or device
+management information).  The operation queue mechanism in BMI is based
+on the doubly linked list implementation found in the Linux kernel. 
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">op_queue_new()</SPAN>: Creates a new operation queue.
+</LI>
+<LI><SPAN  CLASS="textbf">op_queue_cleanup()</SPAN>:  Destroys an existing
+operation queue as well as any operations contained within it.
+</LI>
+<LI><SPAN  CLASS="textbf">op_queue_add()</SPAN>:  Adds a
+method operation onto the tail of a queue.
+</LI>
+<LI><SPAN  CLASS="textbf">op_queue_remove()</SPAN>:  Removes a specific
+operation from the queue in which it resides.
+</LI>
+<LI><SPAN  CLASS="textbf">op_queue_search()</SPAN>:  Searches for
+an operation that matches the characteristics specified a given key.  All
+searches begin at the head of the target operation queue.
+</LI>
+<LI><SPAN  CLASS="textbf">op_queue_empty()</SPAN>: Determines whether a
+queue is empty or not.
+</LI>
+<LI><SPAN  CLASS="textbf">op_queue_count()</SPAN>: Counts the number of
+entries within an operation queue.  This function requires iteration
+through every element of the queue.  It is therefore only suitable for
+debugging purposes in which performance is not critical.
+</LI>
+<LI><SPAN  CLASS="textbf">op_queue_dump()</SPAN>: Prints out
+information about every operation in the queue.  Only used for debugging
+and prototyping purposes.
+</LI>
+</UL>
+
+<P>
+Two related functions are also provided for managing the creation of
+operation structures:
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">alloc_method_op()</SPAN>:  Allocates a new
+operation structure.
+</LI>
+<LI><SPAN  CLASS="textbf">dealloc_method_op()</SPAN>: Deallocates an existing
+method operation.
+</LI>
+</UL>
+
+<P>
+
+<H3><A NAME="SECTION00073200000000000000">
+<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">2</SPAN> Method address support</A>
+</H3>
+
+<P>
+Method address structures are used by methods to identify network hosts.
+Like operation structures, they contain private storage for internal
+method use.  Three functions are provided to aid in managing these
+structures:
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">alloc_method_addr()</SPAN>:  Creates
+a new address structure.  
+</LI>
+<LI><SPAN  CLASS="textbf">dealloc_method_addr()</SPAN>:  Destroys an
+existing method address structure.
+</LI>
+<LI><SPAN  CLASS="textbf">bmi_method_addr_reg_callback()</SPAN>:
+This is called by a method to inform the method control layer that it
+should register a new method address structure.  The function is
+typically invoked when an unexpected message arrives and the method must
+create a new address structure to represent the source
+host and register it with the upper API layers.  
+</LI>
+</UL>
+
+<P>
+
+<H3><A NAME="SECTION00073300000000000000">
+<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">3</SPAN> Logging and debugging</A>
+</H3>
+
+<P>
+BMI uses the <SPAN  CLASS="textit">gossip</SPAN> library for reporting errors and
+logging messages.  This mechanism is used in several other
+components besides BMI as well.  A discussion of gossip may be
+found in the <SPAN  CLASS="textit">parl-developer-guidelines</SPAN> document.
+
+<P>
+
+<H3><A NAME="SECTION00073400000000000000">
+<SPAN CLASS="arabic">7</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">4</SPAN> Operation id's</A>
+</H3>
+
+<P>
+Each method is responsible for creating opaque id's that can be used to
+refer to operations that are currently in progress.  Typically these
+id's will be used to map user requests to specific operation structures.
+The <SPAN  CLASS="textit">id_generator</SPAN> library is available to aid methods in
+performing this mapping operation.  It
+also insures that the id space is consistent across all methods.
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">id_gen_fast_register()</SPAN>: Registers
+a new structure with the interface and creates a new id that may be used
+to reference it.
+</LI>
+<LI><SPAN  CLASS="textbf">id_gen_fast_lookup()</SPAN>:  Returns a pointer to the
+original data structure that was associated with the given id.
+</LI>
+</UL>
+
+<P>
+
+<H1><A NAME="SECTION00080000000000000000"></A>
+<A NAME="sec:ref"></A>
+<BR>
+<SPAN CLASS="arabic">8</SPAN> References
+</H1>
+
+<P>
+
+<UL>
+<LI><SPAN  CLASS="textbf">source code</SPAN>: The source code to BMI may be found in the
+``pvfs2'' cvs tree, within the pvfs2/src/io/bmi directory.
+</LI>
+<LI><SPAN  CLASS="textbf">example methods</SPAN>: Two example methods have been created
+thus far.  A method for the GM protocol may be found in
+pvfs2/src/io/bmi/bmi_gm.  A method for the TCP/IP protocol may be found
+in pvfs2/src/io/bmi/bmi_tcp.
+</LI>
+<LI><SPAN  CLASS="textbf">benchmarks</SPAN>:  Benchmarks that compare MPI and BMI
+can be found in pvfs2/src/io/bmi/benchmark.   
+</LI>
+<LI><SPAN  CLASS="textbf">example applications</SPAN>:  Example applications that use BMI
+directly may be found in pvfs2/src/io/bmi/examples.   
+</LI>
+<LI><SPAN  CLASS="textbf">BMI technical paper</SPAN>: work in progress, available in
+cvs as the ``bmi_paper'' project.
+</LI>
+</UL>
+
+<P>
+
+<H1><A NAME="SECTION00090000000000000000">
+About this document ...</A>
+</H1>
+ <STRONG>BMI Document</STRONG><P>
+This document was generated using the
+<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 2002-2-1 (1.71)
+<P>
+Copyright &#169; 1993, 1994, 1995, 1996,
+Nikos Drakos, 
+Computer Based Learning Unit, University of Leeds.
+<BR>
+Copyright &#169; 1997, 1998, 1999,
+<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
+Mathematics Department, Macquarie University, Sydney.
+<P>
+The command line arguments were: <BR>
+ <STRONG>latex2html</STRONG> <TT>-split 0 -show_section_numbers -nonavigation bmi-design.tex</TT>
+<P>
+The translation was initiated by Samuel Lang on 2010-02-04
+<BR><HR>
+<ADDRESS>
+Samuel Lang
+2010-02-04
+</ADDRESS>
+</BODY>
+</HTML>

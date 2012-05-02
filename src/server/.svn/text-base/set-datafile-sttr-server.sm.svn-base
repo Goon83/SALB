@@ -1,0 +1,183 @@
+/* 
+ * (C) 2001 Clemson University and The University of Chicago 
+ *
+ * See COPYING in top-level directory.
+ */
+
+#include <string.h>
+#include <assert.h>
+
+#include "server-config.h"
+#include "pvfs2-server.h"
+#include "pvfs2-attr.h"
+#include "pvfs2-util.h"
+#include "pvfs2-internal.h"
+#include "pint-util.h"
+
+PVFS_ds_attributes set_df_attr;
+
+%%
+
+machine pvfs2_set_df_attr_server_sm
+{
+    state prelude
+    {
+        jump pvfs2_prelude_sm;
+        success => get_datafile_attribs;
+        default => final_response;
+    }
+
+    state get_datafile_attribs
+    {
+        run get_datafile_attribs_op;
+	success => set_datafile_attribs;
+        default => final_response;
+    }
+    state set_datafile_attribs
+    {
+        run set_datafile_attribs_op;
+	success => set_response_value;
+        default => final_response;
+    }
+    state set_response_value
+    {
+        run set_response_value_op;
+        default => final_response;
+    }
+    
+    state final_response
+    {
+        jump pvfs2_final_response_sm;
+        default => cleanup;
+    }
+
+    state cleanup
+    {
+        run setattr_cleanup;
+        default => terminate;
+    }
+
+}
+
+%%
+
+/* Get the origianl datafile's attributes */
+static PINT_sm_action get_datafile_attribs_op(struct PINT_smcb *smcb, job_status_s *js_p)
+{
+
+
+  
+  job_id_t j_id;
+  struct PINT_server_op *s_op = PINT_sm_frame(smcb, PINT_FRAME_CURRENT);
+  
+  //  gossip_debug(GOSSIP_LB_DEBUG, "\n\n Get the request \n\n");
+  return (job_trove_dspace_getattr(
+				   s_op->req->u.set_df_attr_poster.fs_id,
+				   s_op->req->u.set_df_attr_poster.handle,
+				   smcb,
+				   &set_df_attr,
+				   0,
+				   js_p,
+				   &j_id,
+				   server_job_context,
+				   NULL)
+	  );
+}
+
+
+/* /\* Get the origianl datafile's attributes *\/ */
+/* static PINT_sm_action check_datafile_attribs_op(struct PINT_smcb *smcb, job_status_s *js_p) */
+/* { */
+
+
+  
+/*   job_id_t j_id; */
+/*   struct PINT_server_op *s_op = PINT_sm_frame(smcb, PINT_FRAME_CURRENT); */
+  
+/*   memset(&set_df_attr, 0, sizeof(set_df_attr)); */
+
+/*   //  gossip_debug(GOSSIP_LB_DEBUG, "\n\n Get the request \n\n"); */
+/*   return (job_trove_dspace_getattr( */
+/* 				   s_op->req->u.set_df_attr_poster.fs_id, */
+/* 				   s_op->req->u.set_df_attr_poster.handle, */
+/* 				   smcb, */
+/* 				   &set_df_attr, */
+/* 				   0, */
+/* 				   js_p, */
+/* 				   &j_id, */
+/* 				   server_job_context, */
+/* 				   NULL) */
+/* 	  ); */
+/* } */
+
+
+/* Add metafile to datafile's attributes */
+static PINT_sm_action set_datafile_attribs_op(struct PINT_smcb *smcb, job_status_s *js_p)
+{
+
+  int ret;
+  struct PINT_server_op *s_op = PINT_sm_frame(smcb, PINT_FRAME_CURRENT);
+  job_id_t j_id;
+
+ 
+  set_df_attr.metafile = s_op->req->u.set_df_attr_poster.metafile;
+
+  ret = job_trove_dspace_setattr(
+        s_op->req->u.set_df_attr_poster.fs_id, 
+	s_op->req->u.set_df_attr_poster.handle,
+        &set_df_attr, 
+        TROVE_SYNC,
+        smcb, 
+	0, 
+	js_p, 
+	&j_id, 
+	server_job_context, 
+	NULL);
+  
+  return ret;  
+  
+}
+
+
+
+/* Set response value to 0, indicating all is OK */
+static PINT_sm_action  set_response_value_op(struct PINT_smcb *smcb, job_status_s *js_p){
+  struct PINT_server_op *s_op = PINT_sm_frame(smcb, PINT_FRAME_CURRENT);
+
+//  gossip_debug(GOSSIP_LB_DEBUG, "Set df attr finished for %lld with metafile %lld\n",s_op->req->u.set_df_attr_poster.handle, set_df_attr.metafile);
+
+  s_op->resp.u.set_df_attr_poster.handle = 2;
+
+  js_p->error_code = 0;
+  return SM_ACTION_COMPLETE;
+}
+
+static PINT_sm_action setattr_cleanup(struct PINT_smcb *smcb, job_status_s *js_p){
+  js_p->error_code = 0;
+  return (server_state_machine_complete(smcb));
+
+}
+
+
+PINT_GET_OBJECT_REF_DEFINE(set_df_attr_poster);
+
+struct PINT_server_req_params pvfs2_set_datafile_attr_server_params =
+{
+    .string_name = "set_df_attr",
+    .perm = PINT_SERVER_CHECK_NONE,
+    .access_type = PINT_server_req_modify,
+    .sched_policy = PINT_SERVER_REQ_SCHEDULE,
+    .get_object_ref = PINT_get_object_ref_set_df_attr_poster,
+    .state_machine = &pvfs2_set_df_attr_server_sm
+};
+
+/*
+ * Local variables:
+ *  mode: c
+ *  c-indent-level: 4
+ *  c-basic-offset: 4
+ * End:
+ *
+ * vim: ft=c ts=8 sts=4 sw=4 expandtab
+ */
+

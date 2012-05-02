@@ -1,0 +1,1564 @@
+%!PS-Adobe-2.0
+%%Creator: dvips(k) 5.96.1 Copyright 2007 Radical Eye Software
+%%Title: concepts.dvi
+%%CreationDate: Thu Feb  4 12:40:14 2010
+%%Pages: 4
+%%PageOrder: Ascend
+%%BoundingBox: 0 0 612 792
+%%DocumentFonts: Times-Roman Courier Times-Bold Times-BoldItalic
+%%+ Times-Italic
+%%DocumentPaperSizes: Letter
+%%EndComments
+%DVIPSWebPage: (www.radicaleye.com)
+%DVIPSCommandLine: dvips -t letter concepts.dvi -o concepts.ps
+%DVIPSParameters: dpi=600
+%DVIPSSource:  TeX output 2010.02.04:1240
+%%BeginProcSet: tex.pro 0 0
+%!
+/TeXDict 300 dict def TeXDict begin/N{def}def/B{bind def}N/S{exch}N/X{S
+N}B/A{dup}B/TR{translate}N/isls false N/vsize 11 72 mul N/hsize 8.5 72
+mul N/landplus90{false}def/@rigin{isls{[0 landplus90{1 -1}{-1 1}ifelse 0
+0 0]concat}if 72 Resolution div 72 VResolution div neg scale isls{
+landplus90{VResolution 72 div vsize mul 0 exch}{Resolution -72 div hsize
+mul 0}ifelse TR}if Resolution VResolution vsize -72 div 1 add mul TR[
+matrix currentmatrix{A A round sub abs 0.00001 lt{round}if}forall round
+exch round exch]setmatrix}N/@landscape{/isls true N}B/@manualfeed{
+statusdict/manualfeed true put}B/@copies{/#copies X}B/FMat[1 0 0 -1 0 0]
+N/FBB[0 0 0 0]N/nn 0 N/IEn 0 N/ctr 0 N/df-tail{/nn 8 dict N nn begin
+/FontType 3 N/FontMatrix fntrx N/FontBBox FBB N string/base X array
+/BitMaps X/BuildChar{CharBuilder}N/Encoding IEn N end A{/foo setfont}2
+array copy cvx N load 0 nn put/ctr 0 N[}B/sf 0 N/df{/sf 1 N/fntrx FMat N
+df-tail}B/dfs{div/sf X/fntrx[sf 0 0 sf neg 0 0]N df-tail}B/E{pop nn A
+definefont setfont}B/Cw{Cd A length 5 sub get}B/Ch{Cd A length 4 sub get
+}B/Cx{128 Cd A length 3 sub get sub}B/Cy{Cd A length 2 sub get 127 sub}
+B/Cdx{Cd A length 1 sub get}B/Ci{Cd A type/stringtype ne{ctr get/ctr ctr
+1 add N}if}B/CharBuilder{save 3 1 roll S A/base get 2 index get S
+/BitMaps get S get/Cd X pop/ctr 0 N Cdx 0 Cx Cy Ch sub Cx Cw add Cy
+setcachedevice Cw Ch true[1 0 0 -1 -.1 Cx sub Cy .1 sub]{Ci}imagemask
+restore}B/D{/cc X A type/stringtype ne{]}if nn/base get cc ctr put nn
+/BitMaps get S ctr S sf 1 ne{A A length 1 sub A 2 index S get sf div put
+}if put/ctr ctr 1 add N}B/I{cc 1 add D}B/bop{userdict/bop-hook known{
+bop-hook}if/SI save N @rigin 0 0 moveto/V matrix currentmatrix A 1 get A
+mul exch 0 get A mul add .99 lt{/QV}{/RV}ifelse load def pop pop}N/eop{
+SI restore userdict/eop-hook known{eop-hook}if showpage}N/@start{
+userdict/start-hook known{start-hook}if pop/VResolution X/Resolution X
+1000 div/DVImag X/IEn 256 array N 2 string 0 1 255{IEn S A 360 add 36 4
+index cvrs cvn put}for pop 65781.76 div/vsize X 65781.76 div/hsize X}N
+/p{show}N/RMat[1 0 0 -1 0 0]N/BDot 260 string N/Rx 0 N/Ry 0 N/V{}B/RV/v{
+/Ry X/Rx X V}B statusdict begin/product where{pop false[(Display)(NeXT)
+(LaserWriter 16/600)]{A length product length le{A length product exch 0
+exch getinterval eq{pop true exit}if}{pop}ifelse}forall}{false}ifelse
+end{{gsave TR -.1 .1 TR 1 1 scale Rx Ry false RMat{BDot}imagemask
+grestore}}{{gsave TR -.1 .1 TR Rx Ry scale 1 1 false RMat{BDot}
+imagemask grestore}}ifelse B/QV{gsave newpath transform round exch round
+exch itransform moveto Rx 0 rlineto 0 Ry neg rlineto Rx neg 0 rlineto
+fill grestore}B/a{moveto}B/delta 0 N/tail{A/delta X 0 rmoveto}B/M{S p
+delta add tail}B/b{S p tail}B/c{-4 M}B/d{-3 M}B/e{-2 M}B/f{-1 M}B/g{0 M}
+B/h{1 M}B/i{2 M}B/j{3 M}B/k{4 M}B/w{0 rmoveto}B/l{p -4 w}B/m{p -3 w}B/n{
+p -2 w}B/o{p -1 w}B/q{p 1 w}B/r{p 2 w}B/s{p 3 w}B/t{p 4 w}B/x{0 S
+rmoveto}B/y{3 2 roll p a}B/bos{/SS save N}B/eos{SS restore}B end
+
+%%EndProcSet
+%%BeginProcSet: 8r.enc 0 0
+% File 8r.enc  TeX Base 1 Encoding  Revision 2.0  2002-10-30
+%
+% @@psencodingfile@{
+%   author    = "S. Rahtz, P. MacKay, Alan Jeffrey, B. Horn, K. Berry,
+%                W. Schmidt, P. Lehman",
+%   version   = "2.0",
+%   date      = "27nov06",
+%   filename  = "8r.enc",
+%   email     = "tex-fonts@@tug.org",
+%   docstring = "This is the encoding vector for Type1 and TrueType
+%                fonts to be used with TeX.  This file is part of the
+%                PSNFSS bundle, version 9"
+% @}
+% 
+% The idea is to have all the characters normally included in Type 1 fonts
+% available for typesetting. This is effectively the characters in Adobe
+% Standard encoding, ISO Latin 1, Windows ANSI including the euro symbol,
+% MacRoman, and some extra characters from Lucida.
+% 
+% Character code assignments were made as follows:
+% 
+% (1) the Windows ANSI characters are almost all in their Windows ANSI
+% positions, because some Windows users cannot easily reencode the
+% fonts, and it makes no difference on other systems. The only Windows
+% ANSI characters not available are those that make no sense for
+% typesetting -- rubout (127 decimal), nobreakspace (160), softhyphen
+% (173). quotesingle and grave are moved just because it's such an
+% irritation not having them in TeX positions.
+% 
+% (2) Remaining characters are assigned arbitrarily to the lower part
+% of the range, avoiding 0, 10 and 13 in case we meet dumb software.
+% 
+% (3) Y&Y Lucida Bright includes some extra text characters; in the
+% hopes that other PostScript fonts, perhaps created for public
+% consumption, will include them, they are included starting at 0x12.
+% These are /dotlessj /ff /ffi /ffl.
+% 
+% (4) hyphen appears twice for compatibility with both ASCII and Windows.
+%
+% (5) /Euro was assigned to 128, as in Windows ANSI
+%
+% (6) Missing characters from MacRoman encoding incorporated as follows:
+%
+%     PostScript      MacRoman        TeXBase1
+%     --------------  --------------  --------------
+%     /notequal       173             0x16
+%     /infinity       176             0x17
+%     /lessequal      178             0x18
+%     /greaterequal   179             0x19
+%     /partialdiff    182             0x1A
+%     /summation      183             0x1B
+%     /product        184             0x1C
+%     /pi             185             0x1D
+%     /integral       186             0x81
+%     /Omega          189             0x8D
+%     /radical        195             0x8E
+%     /approxequal    197             0x8F
+%     /Delta          198             0x9D
+%     /lozenge        215             0x9E
+%
+/TeXBase1Encoding [
+% 0x00
+ /.notdef /dotaccent /fi /fl
+ /fraction /hungarumlaut /Lslash /lslash
+ /ogonek /ring /.notdef /breve
+ /minus /.notdef /Zcaron /zcaron
+% 0x10
+ /caron /dotlessi /dotlessj /ff
+ /ffi /ffl /notequal /infinity
+ /lessequal /greaterequal /partialdiff /summation
+ /product /pi /grave /quotesingle
+% 0x20
+ /space /exclam /quotedbl /numbersign
+ /dollar /percent /ampersand /quoteright
+ /parenleft /parenright /asterisk /plus
+ /comma /hyphen /period /slash
+% 0x30
+ /zero /one /two /three
+ /four /five /six /seven
+ /eight /nine /colon /semicolon
+ /less /equal /greater /question
+% 0x40
+ /at /A /B /C
+ /D /E /F /G
+ /H /I /J /K
+ /L /M /N /O
+% 0x50
+ /P /Q /R /S
+ /T /U /V /W
+ /X /Y /Z /bracketleft
+ /backslash /bracketright /asciicircum /underscore
+% 0x60
+ /quoteleft /a /b /c
+ /d /e /f /g
+ /h /i /j /k
+ /l /m /n /o
+% 0x70
+ /p /q /r /s
+ /t /u /v /w
+ /x /y /z /braceleft
+ /bar /braceright /asciitilde /.notdef
+% 0x80
+ /Euro /integral /quotesinglbase /florin
+ /quotedblbase /ellipsis /dagger /daggerdbl
+ /circumflex /perthousand /Scaron /guilsinglleft
+ /OE /Omega /radical /approxequal
+% 0x90
+ /.notdef /.notdef /.notdef /quotedblleft
+ /quotedblright /bullet /endash /emdash
+ /tilde /trademark /scaron /guilsinglright
+ /oe /Delta /lozenge /Ydieresis
+% 0xA0
+ /.notdef /exclamdown /cent /sterling
+ /currency /yen /brokenbar /section
+ /dieresis /copyright /ordfeminine /guillemotleft
+ /logicalnot /hyphen /registered /macron
+% 0xB0
+ /degree /plusminus /twosuperior /threesuperior
+ /acute /mu /paragraph /periodcentered
+ /cedilla /onesuperior /ordmasculine /guillemotright
+ /onequarter /onehalf /threequarters /questiondown
+% 0xC0
+ /Agrave /Aacute /Acircumflex /Atilde
+ /Adieresis /Aring /AE /Ccedilla
+ /Egrave /Eacute /Ecircumflex /Edieresis
+ /Igrave /Iacute /Icircumflex /Idieresis
+% 0xD0
+ /Eth /Ntilde /Ograve /Oacute
+ /Ocircumflex /Otilde /Odieresis /multiply
+ /Oslash /Ugrave /Uacute /Ucircumflex
+ /Udieresis /Yacute /Thorn /germandbls
+% 0xE0
+ /agrave /aacute /acircumflex /atilde
+ /adieresis /aring /ae /ccedilla
+ /egrave /eacute /ecircumflex /edieresis
+ /igrave /iacute /icircumflex /idieresis
+% 0xF0
+ /eth /ntilde /ograve /oacute
+ /ocircumflex /otilde /odieresis /divide
+ /oslash /ugrave /uacute /ucircumflex
+ /udieresis /yacute /thorn /ydieresis
+] def
+
+
+%%EndProcSet
+%%BeginProcSet: texps.pro 0 0
+%!
+TeXDict begin/rf{findfont dup length 1 add dict begin{1 index/FID ne 2
+index/UniqueID ne and{def}{pop pop}ifelse}forall[1 index 0 6 -1 roll
+exec 0 exch 5 -1 roll VResolution Resolution div mul neg 0 0]FontType 0
+ne{/Metrics exch def dict begin Encoding{exch dup type/integertype ne{
+pop pop 1 sub dup 0 le{pop}{[}ifelse}{FontMatrix 0 get div Metrics 0 get
+div def}ifelse}forall Metrics/Metrics currentdict end def}{{1 index type
+/nametype eq{exit}if exch pop}loop}ifelse[2 index currentdict end
+definefont 3 -1 roll makefont/setfont cvx]cvx def}def/ObliqueSlant{dup
+sin S cos div neg}B/SlantFont{4 index mul add}def/ExtendFont{3 -1 roll
+mul exch}def/ReEncodeFont{CharStrings rcheck{/Encoding false def dup[
+exch{dup CharStrings exch known not{pop/.notdef/Encoding true def}if}
+forall Encoding{]exch pop}{cleartomark}ifelse}if/Encoding exch def}def
+end
+
+%%EndProcSet
+%%BeginProcSet: special.pro 0 0
+%!
+TeXDict begin/SDict 200 dict N SDict begin/@SpecialDefaults{/hs 612 N
+/vs 792 N/ho 0 N/vo 0 N/hsc 1 N/vsc 1 N/ang 0 N/CLIP 0 N/rwiSeen false N
+/rhiSeen false N/letter{}N/note{}N/a4{}N/legal{}N}B/@scaleunit 100 N
+/@hscale{@scaleunit div/hsc X}B/@vscale{@scaleunit div/vsc X}B/@hsize{
+/hs X/CLIP 1 N}B/@vsize{/vs X/CLIP 1 N}B/@clip{/CLIP 2 N}B/@hoffset{/ho
+X}B/@voffset{/vo X}B/@angle{/ang X}B/@rwi{10 div/rwi X/rwiSeen true N}B
+/@rhi{10 div/rhi X/rhiSeen true N}B/@llx{/llx X}B/@lly{/lly X}B/@urx{
+/urx X}B/@ury{/ury X}B/magscale true def end/@MacSetUp{userdict/md known
+{userdict/md get type/dicttype eq{userdict begin md length 10 add md
+maxlength ge{/md md dup length 20 add dict copy def}if end md begin
+/letter{}N/note{}N/legal{}N/od{txpose 1 0 mtx defaultmatrix dtransform S
+atan/pa X newpath clippath mark{transform{itransform moveto}}{transform{
+itransform lineto}}{6 -2 roll transform 6 -2 roll transform 6 -2 roll
+transform{itransform 6 2 roll itransform 6 2 roll itransform 6 2 roll
+curveto}}{{closepath}}pathforall newpath counttomark array astore/gc xdf
+pop ct 39 0 put 10 fz 0 fs 2 F/|______Courier fnt invertflag{PaintBlack}
+if}N/txpose{pxs pys scale ppr aload pop por{noflips{pop S neg S TR pop 1
+-1 scale}if xflip yflip and{pop S neg S TR 180 rotate 1 -1 scale ppr 3
+get ppr 1 get neg sub neg ppr 2 get ppr 0 get neg sub neg TR}if xflip
+yflip not and{pop S neg S TR pop 180 rotate ppr 3 get ppr 1 get neg sub
+neg 0 TR}if yflip xflip not and{ppr 1 get neg ppr 0 get neg TR}if}{
+noflips{TR pop pop 270 rotate 1 -1 scale}if xflip yflip and{TR pop pop
+90 rotate 1 -1 scale ppr 3 get ppr 1 get neg sub neg ppr 2 get ppr 0 get
+neg sub neg TR}if xflip yflip not and{TR pop pop 90 rotate ppr 3 get ppr
+1 get neg sub neg 0 TR}if yflip xflip not and{TR pop pop 270 rotate ppr
+2 get ppr 0 get neg sub neg 0 S TR}if}ifelse scaleby96{ppr aload pop 4
+-1 roll add 2 div 3 1 roll add 2 div 2 copy TR .96 dup scale neg S neg S
+TR}if}N/cp{pop pop showpage pm restore}N end}if}if}N/normalscale{
+Resolution 72 div VResolution 72 div neg scale magscale{DVImag dup scale
+}if 0 setgray}N/psfts{S 65781.76 div N}N/startTexFig{/psf$SavedState
+save N userdict maxlength dict begin/magscale true def normalscale
+currentpoint TR/psf$ury psfts/psf$urx psfts/psf$lly psfts/psf$llx psfts
+/psf$y psfts/psf$x psfts currentpoint/psf$cy X/psf$cx X/psf$sx psf$x
+psf$urx psf$llx sub div N/psf$sy psf$y psf$ury psf$lly sub div N psf$sx
+psf$sy scale psf$cx psf$sx div psf$llx sub psf$cy psf$sy div psf$ury sub
+TR/showpage{}N/erasepage{}N/setpagedevice{pop}N/copypage{}N/p 3 def
+@MacSetUp}N/doclip{psf$llx psf$lly psf$urx psf$ury currentpoint 6 2 roll
+newpath 4 copy 4 2 roll moveto 6 -1 roll S lineto S lineto S lineto
+closepath clip newpath moveto}N/endTexFig{end psf$SavedState restore}N
+/@beginspecial{SDict begin/SpecialSave save N gsave normalscale
+currentpoint TR @SpecialDefaults count/ocount X/dcount countdictstack N}
+N/@setspecial{CLIP 1 eq{newpath 0 0 moveto hs 0 rlineto 0 vs rlineto hs
+neg 0 rlineto closepath clip}if ho vo TR hsc vsc scale ang rotate
+rwiSeen{rwi urx llx sub div rhiSeen{rhi ury lly sub div}{dup}ifelse
+scale llx neg lly neg TR}{rhiSeen{rhi ury lly sub div dup scale llx neg
+lly neg TR}if}ifelse CLIP 2 eq{newpath llx lly moveto urx lly lineto urx
+ury lineto llx ury lineto closepath clip}if/showpage{}N/erasepage{}N
+/setpagedevice{pop}N/copypage{}N newpath}N/@endspecial{count ocount sub{
+pop}repeat countdictstack dcount sub{end}repeat grestore SpecialSave
+restore end}N/@defspecial{SDict begin}N/@fedspecial{end}B/li{lineto}B
+/rl{rlineto}B/rc{rcurveto}B/np{/SaveX currentpoint/SaveY X N 1
+setlinecap newpath}N/st{stroke SaveX SaveY moveto}N/fil{fill SaveX SaveY
+moveto}N/ellipse{/endangle X/startangle X/yrad X/xrad X/savematrix
+matrix currentmatrix N TR xrad yrad scale 0 0 1 startangle endangle arc
+savematrix setmatrix}N end
+
+%%EndProcSet
+TeXDict begin 40258431 52099146 1000 600 600 (concepts.dvi)
+@start /Fa 107[46 46 25[37 37 55 37 42 23 32 32 42 42
+42 42 60 23 37 23 23 42 42 23 37 42 37 42 42 16[51 6[28
+2[51 51 3[51 1[42 13[42 2[21 28 21 2[28 28 28 36[42 2[{
+TeXBase1Encoding ReEncodeFont}41 83.022 /Times-Italic
+rf /Fb 134[37 1[55 37 46 23 32 32 42 42 42 46 65 23 42
+23 23 46 42 28 37 42 37 42 42 19[74 3[32 6[55 24[28 28
+36[46 46 2[{TeXBase1Encoding ReEncodeFont}31 83.022 /Times-BoldItalic
+rf /Fc 105[42 1[37 37 24[37 42 42 60 42 42 23 32 28 42
+42 42 42 65 23 42 23 23 42 42 28 37 42 37 42 37 8[60
+78 60 60 51 46 55 1[46 60 60 74 51 1[32 28 1[60 46 1[60
+55 55 60 1[37 4[23 1[42 1[42 1[42 42 42 42 1[23 21 28
+21 2[28 28 28 35[46 46 2[{TeXBase1Encoding ReEncodeFont}66
+83.022 /Times-Roman rf /Fd 136[86 60 66 40 47 53 2[60
+66 100 3[33 66 1[40 53 66 53 11[120 2[80 10[47 21[60
+60 60 60 3[30 44[{TeXBase1Encoding ReEncodeFont}23 119.552
+/Times-Bold rf /Fe 134[50 50 1[50 1[50 50 2[50 50 50
+1[50 2[50 1[50 1[50 50 50 1[50 23[50 3[50 10[50 50 2[50
+1[50 50 50 50 50 50 50 1[50 7[50 36[{TeXBase1Encoding ReEncodeFont}29
+83.022 /Courier rf /Ff 134[50 2[50 50 28 1[33 1[50 50
+50 78 28 6[44 2[50 44 10[72 1[61 55 2[55 9[55 1[72 15[50
+1[50 50 50 3[25 44[{TeXBase1Encoding ReEncodeFont}24
+99.6264 /Times-Roman rf /Fg 134[72 1[104 1[72 40 56 2[72
+72 72 4[40 72 72 1[64 72 64 12[104 1[88 80 2[80 9[80
+2[96 8[40 7[72 10[48 39[{TeXBase1Encoding ReEncodeFont}23
+143.462 /Times-Roman rf end
+%%EndProlog
+%%BeginSetup
+%%Feature: *Resolution 600dpi
+TeXDict begin
+%%BeginPaperSize: Letter
+/setpagedevice where
+{ pop << /PageSize [612 792] >> setpagedevice }
+{ /letter where { pop letter } if }
+ifelse
+%%EndPaperSize
+ end
+%%EndSetup
+%%Page: 1 1
+TeXDict begin 1 0 bop 534 534 a Fg(PVFS)34 b(2)i(Concepts:)42
+b(The)35 b(ne)l(w)g(guy')-8 b(s)35 b(guide)g(to)g(PVFS)1427
+874 y Ff(PVFS)26 b(De)n(v)o(elopment)c(T)-7 b(eam)1605
+1168 y(February)26 b(4,)e(2010)42 1533 y Fe($Id:)49 b(concepts.tex,v)f
+(1.3)h(2006/09/13)f(20:22:43)g(vilayann)g(Exp)i($)42
+1913 y Fd(1)120 b(Intr)n(oduction)42 2198 y Fc(PVFS2)19
+b(represents)f(a)h(complete)e(redesign)h(and)g(reimplementation)e(of)i
+(the)g(parallel)g(\002le)i(system)e(concepts)g(in)h(PVFS1.)25
+b(PVFS2)42 2298 y(has)19 b(ne)n(w)g(entities)g(acting)f(in)g(ne)n(w)h
+(w)o(ays)g(on)f(ne)n(w)g(objects.)24 b(This)19 b(document)e(will)i
+(serv)o(e)f(as)i(an)e(introduction)e(to)j(the)g(terminology)42
+2398 y(and)h(concepts)f(used)h(in)g(the)h(other)e(pvfs2)g(documents.)42
+2778 y Fd(2)120 b(W)-9 b(ords)42 2996 y Fb(system)21
+b(interface)41 b Fc(lo)n(w-le)n(v)o(el)19 b(interf)o(ace)h(to)h(PVFS.)g
+(sits)h(on)f(top)f(of)g(the)h(serv)o(ers.)26 b(pro)o(vides)19
+b(underlying)f(foundation)g(to)i(higher)n(-)250 3096
+y(le)n(v)o(el)g(interf)o(aces)f(lik)o(e)i(the)f(PVFS)h(library)e(\()i
+(libpvfs2)e(\))h(and)g(the)g(PVFS)h(VFS)g(interf)o(ace.)42
+3262 y Fb(distrib)n(utions)42 b Fc(\(also)19 b(\223\002le)g(distrib)n
+(utions\224,)e(\223physical)g(distrib)n(ution\224)g(\))i(set)g(of)f
+(methods)f(describing)g(a)i(mapping)d(from)i(a)g(logical)250
+3362 y(sequence)29 b(of)g(bytes)h(to)g(a)g(physical)f(layout)g(of)h
+(bytes)f(on)h(PVFS)h(serv)o(ers.)53 b(PVFS1)31 b(had)e(one)g(type)h(of)
+f(distrib)n(ution)g(\226)250 3461 y(re)o(gularly)17 b(striding)i(data.)
+24 b(PVFS2)c(will)g(understand)d(man)o(y)h(distrib)n(utions,)h
+(including)e(b)n(ut)j(not)f(limited)g(to)g(strided,)g(block)250
+3561 y(and)g(c)o(yclic.)42 3727 y Fb(job)62 b Fc(a)20
+b(PVFS)h(operation)e(requires)g(se)n(v)o(eral)g(steps,)i(called)f
+(\223jobs\224)250 3893 y Fb(job)g(interface)41 b Fc(k)o(eeps)20
+b(track)f(of)h(progress)f(as)i(an)f(operation)f(mak)o(es)h(its)h(w)o
+(ay)f(through)e(the)i(pvfs2)g(layers)250 4026 y Fb(job)g(structure)42
+4192 y(BMI)i(\(Buf)o(f)o(ered)d(Message)h(Interface\))41
+b Fc(abstracts)15 b(netw)o(ork)f(communication.)20 b(Currently)14
+b(BMI)i(supports)e(TCP)-9 b(,)16 b(Myricom/GM,)250 4291
+y(and)23 b(In\002niBand)g(using)g(either)h(V)-11 b(API)24
+b(or)g(OpenIB)f(APIs.)37 b(It)24 b(has)g(been)f(e)o(xtended)f(to)i(at)h
+(least)g(tw)o(o)f(other)f(protocols)f(not)250 4391 y(included)d(in)h
+(the)g(distrib)n(ution.)42 4557 y Fb(\003o)n(ws)42 b
+Fc(a)24 b(\003o)n(w)g(describes)g(the)g(mo)o(v)o(ement)d(of)j(\002le)g
+(data)g(from)f(client)h(initialization)f(to)h(putting)f(bits)h(on)g
+(disk.)36 b(It)24 b(encompasses)250 4657 y(both)15 b(transporting)f
+(data)i(o)o(v)o(er)f(the)h(netw)o(ork)f(as)i(well)f(as)h(interacting)e
+(with)h(storage)g(de)n(vices.)23 b(\()16 b(XXX:)h(scheduler?\).)k
+(Users)250 4756 y(tell)g(\003o)n(w)g Fa(what)f Fc(the)o(y)g(w)o(ant)h
+(done,)e(and)h(\003o)n(w)g(\002gures)h(out)f Fa(how)g
+Fc(to)h(accomplish)e(the)i(request.)k(Flo)n(ws)c(are)f(not)g(in)m(v)n
+(olv)o(ed)f(in)250 4856 y(metadata)g(operations.)250
+5022 y Fb(\003o)n(w)i(interface)40 b Fc(the)21 b(API)f(for)g(setting)g
+(up)g(\003o)n(ws)250 5155 y Fb(\003o)n(w)h(protocol)39
+b Fc(Implements)19 b(whate)n(v)o(er)g(underlying)e(protocol)i(is)i
+(needed)e(for)g(tw)o(o)i(endpoints)e(to)h(communicate)250
+5288 y Fb(\003o)n(w)h(endpoint)40 b Fc(the)20 b(source)g(or)g
+(destination)f(of)h(a)g(\003o)n(w)1926 5610 y(1)p eop
+end
+%%Page: 2 2
+TeXDict begin 2 1 bop 250 169 a Fb(\003o)n(w)21 b(descriptor)40
+b Fc(data)20 b(structure)g(representing)e(a)i(\003o)n(w)42
+332 y Fb(tro)o(v)o(e)62 b Fc(stores)20 b(both)f(k)o(e)o(yw)o(ord-v)n
+(alue)e(pairs)j(and)g(data)g(\(?\))291 494 y Fa(stor)o(a)o(g)o(e)g
+(interface)g(\(obsolete\))f Fc(no)n(w)h(called)g Fa(tr)l(o)o(ve)42
+657 y Fb(system)h(lev)o(el)f(objects)62 b Fc(data)20
+b(\002les,)h(metadata)e(\002les,)i(directories,)e(symlinks)250
+820 y Fb(metadata)39 b Fc(data)22 b(about)f(data.)31
+b(in)23 b(the)f(UNIX)g(sense,)h(such)f(things)g(as)g(o)n(wner)m(,)g
+(group,)e(permissions,)i(timestamps,)g(sizes.)432 920
+y(in)f(the)f(PVFS)h(sense,)g(also)f(distrib)n(ution)f(information.)250
+1049 y Fb(data)40 b Fc(actual)20 b(contents)f(of)h(\002le)250
+1179 y Fb(meta\002le)41 b Fc(contains)19 b(the)h(metadata)g(for)f(a)i
+(single)f(PVFS)h(\002le)250 1309 y Fb(data\002le)40 b
+Fc(contains)20 b(some)g(portion)e(of)i(the)g(data)g(for)g(a)h(single)f
+(PVFS)h(\002le)42 1471 y Fb(dataspace)39 b Fc(logical)20
+b(collections)g(of)g(data)250 1634 y Fb(bytestream)40
+b Fc(arbitrary)19 b(binary)g(data.)25 b(Data)20 b(is)h(accessed)f(with)
+h(sizes)g(from)e(of)n(fsets.)250 1764 y Fb(k)n(eyval)60
+b Fc(a)21 b(k)o(e)o(yw)o(ord/v)n(alue)c(pair)-5 b(.)25
+b(Data)c(is)g(accessed)f(by)g(resolving)e(a)j(k)o(e)o(y)-5
+b(.)42 1927 y Fb(collections)42 2090 y(serv)o(er)21 b(request)g
+(protocol)42 2252 y(vtags)62 b Fc(pro)o(vides)21 b(a)j(v)o(ersion)e
+(number)g(for)h(an)o(y)f(re)o(gion)g(of)h(a)h(byte)f(stream)g(or)g(an)o
+(y)g(indi)n(vidual)e(k)o(e)o(y/v)n(alue)h(pair)-5 b(.)35
+b(By)23 b(comparing)250 2352 y(the)d(vtag)g(before)f(and)g(after)h(an)g
+(operation,)e(one)i(can)g(ensure)f(consistenc)o(y)-5
+b(.)42 2515 y Fb(handle)41 b Fc(a)17 b(64-bit)e(tag)h(to)g(uniquely)f
+(identify)g(PVFS)i(objects.)24 b(Re-using)15 b(handles)h(brings)f(up)h
+(some)g(\223interesting\224)f(cases.)24 b(\(aside:)250
+2614 y(what)c(if)g(we)h(made)f(the)g(handles)f(128)g(bits)i(\))42
+2777 y Fb(instance)g(tag)41 b Fc(in)23 b(some)g(cases,)i(a)e(handle)f
+(might)h(refer)f(to)i(tw)o(o)f(distinct)g(\002les)h(with)g(the)f(same)g
+(name.)34 b(The)23 b Fe(instance)48 b(tag)250 2877 y
+Fc(serv)o(es)20 b(as)h(an)f(e)o(xtra)f(identi\002er)h(to)g(help)g
+(ensure)f(consistenc)o(y)42 3040 y Fb(pinode)40 b Fc(A)16
+b(mechanism)e(for)h(associating)f(information)f(with)j(a)f(handle.)22
+b(Lik)o(e)16 b(a)f(linux)g(inode,)g(a)g Fe(pinode)g Fc(contains)f
+(information)250 3139 y(used)20 b(by)g(PVFS2)g(internally)-5
+b(.)42 3302 y Fb(gossip)62 b Fc(A)25 b(logging)d(library)-5
+b(.)36 b(Internal)24 b(to)g(clemson?)37 b(freshmeat)23
+b(doesn')o(t)g(ha)n(v)o(e)h(an)g(entry)g(for)g(it,)i(and)e(searching)f
+(for)g(\223gossip)250 3402 y(logging)18 b(library\224)h(in)i(google)d
+(turns)i(up)g(a)h(ton)e(of)h(irrele)n(v)n(ant)f(searches.)42
+3780 y Fd(3)120 b(The)30 b(view)g(fr)n(om)f(10,000)g(feet)42
+4065 y Fc(Refer)20 b(to)h(\002gure)e(1)h(for)g(an)g(idea)g(of)g(ho)n(w)
+g(the)g(w)o(ords)g(abo)o(v)o(e)e(\002t)j(together)-5
+b(.)42 4265 y(All)28 b(end-user)e(access)j(to)e(PVFS)i(will)f(still)h
+(be)e(pro)o(vided)e(by)i(one)g(of)h(se)n(v)o(eral)f(front)f(ends)h
+(\(VFS)h(k)o(ernel)f(interf)o(ace,)h(R)m(OMIO,)42 4364
+y(libpvfs\))19 b(\()h Fa(what')m(s)f(the)h(right)g(term)g(her)m(e?)25
+b(API,)19 b(FE,)g(interface?)p Fc(\).)24 b(The)19 b(ne)n(w)h(pvfs)f
+(library)f(has)i(not)g(been)f(written)g(yet,)h(b)n(ut)f(there)42
+4464 y(is)g(a)g(good)d(chance)h(it)i(will)g(be)f(lar)o(gely)e(similar)j
+(to)f(the)g(current)e(pvfs)i(library)-5 b(.)23 b(The)17
+b(R)m(OMIO)h(and)g(VFS)g(interf)o(aces)g(should)f(remain)42
+4564 y(lar)o(gely)i(unchanged)f(to)i(the)g(end)g(user)m(,)f(aside)i
+(from)e(e)o(xtensions)g(to)h(tak)o(e)g(adv)n(antage)f(of)g(ne)n(w)h
+(PVFS2)h(features.)42 4763 y(The)k(end-user)e(interf)o(aces)i(con)m(v)o
+(er)o(ge)d(at)j(the)g(system)h(interf)o(ace.)38 b(If)25
+b(a)g(user)g(request)g(requires)f(talking)g(to)h(se)n(v)o(eral)g(serv)o
+(ers,)g(the)42 4862 y(system)e(interf)o(ace)f(submits)g(a)h(job)f
+(request)g(for)g(each)g(serv)o(er)g(to)h(the)f(job)g(manager)f(\()i
+Fa(i)g(pr)m(esume)o(,)g(if)g(the)g(job)f(mgr)h(can')n(t)e(split)i(up)42
+4962 y(r)m(equests)e(that)g(the)g(submission)g(of)g(multiple)f(jobs)h
+(happens)e(in)j(the)f(sys-int.)27 b(or)21 b(will)i(the)d(client)h
+(\002nd)f(out)h(who)g(he)g(has)g(to)g(talk)g(to)42 5062
+y(after)g(opening)d(the)i(\002le?)p Fc(\).)k(Requests)d(for)f(lar)o(ge)
+f(or)h(noncontiguous)c(data)k(chunks)f(only)h(need)f(one)h(job)g(as)h
+(e)o(xplained)d(belo)n(w)-5 b(.)42 5261 y(The)18 b(job)g(manager)e(is)j
+(a)f(f)o(airly)g(thin)g(layer)f(between)g(the)h(system)h(interf)o(ace)e
+(and)g(BMI,)h(tro)o(v)o(e,)f(and)h(\003o)n(w)-5 b(.)24
+b(It)18 b(should)f(be)h(noted)f(that)42 5361 y(nearly)j(e)n(v)o(ery)f
+(request)g(requires)h(multiple)f(steps)i(\()g(communicate)d(o)o(v)o(er)
+h(the)h(netw)o(ork,)f(read)h(bytes)g(from)f(storage)h(...\),)g(and)f
+(each)1926 5610 y(2)p eop end
+%%Page: 3 3
+TeXDict begin 3 2 bop 1211 1184 a @beginspecial 0 @llx
+0 @lly 706 @urx 527 @ury 1765 @rwi @setspecial
+%%BeginDocument: figs/interface-model.eps
+%!PS-Adobe-2.0 EPSF-2.0
+%%Title: interface-model.eps
+%%Creator: fig2dev Version 3.2 Patchlevel 3c
+%%CreationDate: Thu May 23 17:15:48 2002
+%%For: robl@leela.mcs.anl.gov (Robert Latham,Argonne National Lab - MCS,,)
+%%BoundingBox: 0 0 706 527
+%%Magnification: 1.0000
+%%EndComments
+/MyAppDict 100 dict dup begin def
+/$F2psDict 200 dict def
+$F2psDict begin
+$F2psDict /mtrx matrix put
+/col-1 {0 setgray} bind def
+/col0 {0.000 0.000 0.000 srgb} bind def
+/col1 {0.000 0.000 1.000 srgb} bind def
+/col2 {0.000 1.000 0.000 srgb} bind def
+/col3 {0.000 1.000 1.000 srgb} bind def
+/col4 {1.000 0.000 0.000 srgb} bind def
+/col5 {1.000 0.000 1.000 srgb} bind def
+/col6 {1.000 1.000 0.000 srgb} bind def
+/col7 {1.000 1.000 1.000 srgb} bind def
+/col8 {0.000 0.000 0.560 srgb} bind def
+/col9 {0.000 0.000 0.690 srgb} bind def
+/col10 {0.000 0.000 0.820 srgb} bind def
+/col11 {0.530 0.810 1.000 srgb} bind def
+/col12 {0.000 0.560 0.000 srgb} bind def
+/col13 {0.000 0.690 0.000 srgb} bind def
+/col14 {0.000 0.820 0.000 srgb} bind def
+/col15 {0.000 0.560 0.560 srgb} bind def
+/col16 {0.000 0.690 0.690 srgb} bind def
+/col17 {0.000 0.820 0.820 srgb} bind def
+/col18 {0.560 0.000 0.000 srgb} bind def
+/col19 {0.690 0.000 0.000 srgb} bind def
+/col20 {0.820 0.000 0.000 srgb} bind def
+/col21 {0.560 0.000 0.560 srgb} bind def
+/col22 {0.690 0.000 0.690 srgb} bind def
+/col23 {0.820 0.000 0.820 srgb} bind def
+/col24 {0.500 0.190 0.000 srgb} bind def
+/col25 {0.630 0.250 0.000 srgb} bind def
+/col26 {0.750 0.380 0.000 srgb} bind def
+/col27 {1.000 0.500 0.500 srgb} bind def
+/col28 {1.000 0.630 0.630 srgb} bind def
+/col29 {1.000 0.750 0.750 srgb} bind def
+/col30 {1.000 0.880 0.880 srgb} bind def
+/col31 {1.000 0.840 0.000 srgb} bind def
+/col32 {0.588 0.412 0.937 srgb} bind def
+/col33 {0.651 0.588 0.875 srgb} bind def
+/col34 {0.714 0.682 0.843 srgb} bind def
+/col35 {0.843 0.812 0.843 srgb} bind def
+/col36 {0.937 0.906 0.937 srgb} bind def
+/col37 {0.412 0.286 0.780 srgb} bind def
+
+end
+save
+newpath 0 527 moveto 0 0 lineto 706 0 lineto 706 527 lineto closepath clip newpath
+-75.0 554.0 translate
+1 -1 scale
+
+% This junk string is used by the show operators
+/PATsstr 1 string def
+/PATawidthshow { 	% cx cy cchar rx ry string
+  % Loop over each character in the string
+  {  % cx cy cchar rx ry char
+    % Show the character
+    dup				% cx cy cchar rx ry char char
+    PATsstr dup 0 4 -1 roll put	% cx cy cchar rx ry char (char)
+    false charpath		% cx cy cchar rx ry char
+    /clip load PATdraw
+    % Move past the character (charpath modified the
+    % current point)
+    currentpoint			% cx cy cchar rx ry char x y
+    newpath
+    moveto			% cx cy cchar rx ry char
+    % Reposition by cx,cy if the character in the string is cchar
+    3 index eq {			% cx cy cchar rx ry
+      4 index 4 index rmoveto
+    } if
+    % Reposition all characters by rx ry
+    2 copy rmoveto		% cx cy cchar rx ry
+  } forall
+  pop pop pop pop pop		% -
+  currentpoint
+  newpath
+  moveto
+} bind def
+/PATcg {
+  7 dict dup begin
+    /lw currentlinewidth def
+    /lc currentlinecap def
+    /lj currentlinejoin def
+    /ml currentmiterlimit def
+    /ds [ currentdash ] def
+    /cc [ currentrgbcolor ] def
+    /cm matrix currentmatrix def
+  end
+} bind def
+% PATdraw - calculates the boundaries of the object and
+% fills it with the current pattern
+/PATdraw {			% proc
+  save exch
+    PATpcalc			% proc nw nh px py
+    5 -1 roll exec		% nw nh px py
+    newpath
+    PATfill			% -
+  restore
+} bind def
+% PATfill - performs the tiling for the shape
+/PATfill { % nw nh px py PATfill -
+  PATDict /CurrentPattern get dup begin
+    setfont
+    % Set the coordinate system to Pattern Space
+    PatternGState PATsg
+    % Set the color for uncolored pattezns
+    PaintType 2 eq { PATDict /PColor get PATsc } if
+    % Create the string for showing
+    3 index string		% nw nh px py str
+    % Loop for each of the pattern sources
+    0 1 Multi 1 sub {		% nw nh px py str source
+	% Move to the starting location
+	3 index 3 index		% nw nh px py str source px py
+	moveto			% nw nh px py str source
+	% For multiple sources, set the appropriate color
+	Multi 1 ne { dup PC exch get PATsc } if
+	% Set the appropriate string for the source
+	0 1 7 index 1 sub { 2 index exch 2 index put } for pop
+	% Loop over the number of vertical cells
+	3 index 		% nw nh px py str nh
+	{			% nw nh px py str
+	  currentpoint		% nw nh px py str cx cy
+	  2 index oldshow	% nw nh px py str cx cy
+	  YStep add moveto	% nw nh px py str
+	} repeat		% nw nh px py str
+    } for
+    5 { pop } repeat
+  end
+} bind def
+
+% PATkshow - kshow with the current pattezn
+/PATkshow {			% proc string
+  exch bind			% string proc
+  1 index 0 get			% string proc char
+  % Loop over all but the last character in the string
+  0 1 4 index length 2 sub {
+				% string proc char idx
+    % Find the n+1th character in the string
+    3 index exch 1 add get	% string proe char char+1
+    exch 2 copy			% strinq proc char+1 char char+1 char
+    % Now show the nth character
+    PATsstr dup 0 4 -1 roll put	% string proc chr+1 chr chr+1 (chr)
+    false charpath		% string proc char+1 char char+1
+    /clip load PATdraw
+    % Move past the character (charpath modified the current point)
+    currentpoint newpath moveto
+    % Execute the user proc (should consume char and char+1)
+    mark 3 1 roll		% string proc char+1 mark char char+1
+    4 index exec		% string proc char+1 mark...
+    cleartomark			% string proc char+1
+  } for
+  % Now display the last character
+  PATsstr dup 0 4 -1 roll put	% string proc (char+1)
+  false charpath		% string proc
+  /clip load PATdraw
+  neewath
+  pop pop			% -
+} bind def
+% PATmp - the makepattern equivalent
+/PATmp {			% patdict patmtx PATmp patinstance
+  exch dup length 7 add		% We will add 6 new entries plus 1 FID
+  dict copy			% Create a new dictionary
+  begin
+    % Matrix to install when painting the pattern
+    TilingType PATtcalc
+    /PatternGState PATcg def
+    PatternGState /cm 3 -1 roll put
+    % Check for multi pattern sources (Level 1 fast color patterns)
+    currentdict /Multi known not { /Multi 1 def } if
+    % Font dictionary definitions
+    /FontType 3 def
+    % Create a dummy encoding vector
+    /Encoding 256 array def
+    3 string 0 1 255 {
+      Encoding exch dup 3 index cvs cvn put } for pop
+    /FontMatrix matrix def
+    /FontBBox BBox def
+    /BuildChar {
+	mark 3 1 roll		% mark dict char
+	exch begin
+	Multi 1 ne {PaintData exch get}{pop} ifelse  % mark [paintdata]
+	  PaintType 2 eq Multi 1 ne or
+	  { XStep 0 FontBBox aload pop setcachedevice }
+	  { XStep 0 setcharwidth } ifelse
+	  currentdict		% mark [paintdata] dict
+	  /PaintProc load	% mark [paintdata] dict paintproc
+	end
+	gsave
+	  false PATredef exec true PATredef
+	grestore
+	cleartomark		% -
+    } bind def
+    currentdict
+  end				% newdict
+  /foo exch			% /foo newlict
+  definefont			% newfont
+} bind def
+% PATpcalc - calculates the starting point and width/height
+% of the tile fill for the shape
+/PATpcalc {	% - PATpcalc nw nh px py
+  PATDict /CurrentPattern get begin
+    gsave
+	% Set up the coordinate system to Pattern Space
+	% and lock down pattern
+	PatternGState /cm get setmatrix
+	BBox aload pop pop pop translate
+	% Determine the bounding box of the shape
+	pathbbox			% llx lly urx ury
+    grestore
+    % Determine (nw, nh) the # of cells to paint width and height
+    PatHeight div ceiling		% llx lly urx qh
+    4 1 roll				% qh llx lly urx
+    PatWidth div ceiling		% qh llx lly qw
+    4 1 roll				% qw qh llx lly
+    PatHeight div floor			% qw qh llx ph
+    4 1 roll				% ph qw qh llx
+    PatWidth div floor			% ph qw qh pw
+    4 1 roll				% pw ph qw qh
+    2 index sub cvi abs			% pw ph qs qh-ph
+    exch 3 index sub cvi abs exch	% pw ph nw=qw-pw nh=qh-ph
+    % Determine the starting point of the pattern fill
+    %(px, py)
+    4 2 roll				% nw nh pw ph
+    PatHeight mul			% nw nh pw py
+    exch				% nw nh py pw
+    PatWidth mul exch			% nw nh px py
+  end
+} bind def
+
+% Save the original routines so that we can use them later on
+/oldfill	/fill load def
+/oldeofill	/eofill load def
+/oldstroke	/stroke load def
+/oldshow	/show load def
+/oldashow	/ashow load def
+/oldwidthshow	/widthshow load def
+/oldawidthshow	/awidthshow load def
+/oldkshow	/kshow load def
+
+% These defs are necessary so that subsequent procs don't bind in
+% the originals
+/fill	   { oldfill } bind def
+/eofill	   { oldeofill } bind def
+/stroke	   { oldstroke } bind def
+/show	   { oldshow } bind def
+/ashow	   { oldashow } bind def
+/widthshow { oldwidthshow } bind def
+/awidthshow { oldawidthshow } bind def
+/kshow 	   { oldkshow } bind def
+/PATredef {
+  MyAppDict begin
+    {
+    /fill { /clip load PATdraw newpath } bind def
+    /eofill { /eoclip load PATdraw newpath } bind def
+    /stroke { PATstroke } bind def
+    /show { 0 0 null 0 0 6 -1 roll PATawidthshow } bind def
+    /ashow { 0 0 null 6 3 roll PATawidthshow }
+    bind def
+    /widthshow { 0 0 3 -1 roll PATawidthshow }
+    bind def
+    /awidthshow { PATawidthshow } bind def
+    /kshow { PATkshow } bind def
+  } {
+    /fill   { oldfill } bind def
+    /eofill { oldeofill } bind def
+    /stroke { oldstroke } bind def
+    /show   { oldshow } bind def
+    /ashow  { oldashow } bind def
+    /widthshow { oldwidthshow } bind def
+    /awidthshow { oldawidthshow } bind def
+    /kshow  { oldkshow } bind def
+    } ifelse
+  end
+} bind def
+false PATredef
+% Conditionally define setcmykcolor if not available
+/setcmykcolor where { pop } {
+  /setcmykcolor {
+    1 sub 4 1 roll
+    3 {
+	3 index add neg dup 0 lt { pop 0 } if 3 1 roll
+    } repeat
+    setrgbcolor - pop
+  } bind def
+} ifelse
+/PATsc {		% colorarray
+  aload length		% c1 ... cn length
+    dup 1 eq { pop setgray } { 3 eq { setrgbcolor } { setcmykcolor
+  } ifelse } ifelse
+} bind def
+/PATsg {		% dict
+  begin
+    lw setlinewidth
+    lc setlinecap
+    lj setlinejoin
+    ml setmiterlimit
+    ds aload pop setdash
+    cc aload pop setrgbcolor
+    cm setmatrix
+  end
+} bind def
+
+/PATDict 3 dict def
+/PATsp {
+  true PATredef
+  PATDict begin
+    /CurrentPattern exch def
+    % If it's an uncolored pattern, save the color
+    CurrentPattern /PaintType get 2 eq {
+      /PColor exch def
+    } if
+    /CColor [ currentrgbcolor ] def
+  end
+} bind def
+% PATstroke - stroke with the current pattern
+/PATstroke {
+  countdictstack
+  save
+  mark
+  {
+    currentpoint strokepath moveto
+    PATpcalc				% proc nw nh px py
+    clip newpath PATfill
+    } stopped {
+	(*** PATstroke Warning: Path is too complex, stroking
+	  with gray) =
+    cleartomark
+    restore
+    countdictstack exch sub dup 0 gt
+	{ { end } repeat } { pop } ifelse
+    gsave 0.5 setgray oldstroke grestore
+  } { pop restore pop } ifelse
+  newpath
+} bind def
+/PATtcalc {		% modmtx tilingtype PATtcalc tilematrix
+  % Note: tiling types 2 and 3 are not supported
+  gsave
+    exch concat					% tilingtype
+    matrix currentmatrix exch			% cmtx tilingtype
+    % Tiling type 1 and 3: constant spacing
+    2 ne {
+	% Distort the pattern so that it occupies
+	% an integral number of device pixels
+	dup 4 get exch dup 5 get exch		% tx ty cmtx
+	XStep 0 dtransform
+	round exch round exch			% tx ty cmtx dx.x dx.y
+	XStep div exch XStep div exch		% tx ty cmtx a b
+	0 YStep dtransform
+	round exch round exch			% tx ty cmtx a b dy.x dy.y
+	YStep div exch YStep div exch		% tx ty cmtx a b c d
+	7 -3 roll astore			% { a b c d tx ty }
+    } if
+  grestore
+} bind def
+/PATusp {
+  false PATredef
+  PATDict begin
+    CColor PATsc
+  end
+} bind def
+
+% this is the pattern fill program from the Second edition Reference Manual
+% with changes to call the above pattern fill
+% left30
+11 dict begin
+/PaintType 1 def
+/PatternType 1 def
+/TilingType 1 def
+/BBox [0 0 1 1] def
+/XStep 1 def
+/YStep 1 def
+/PatWidth 1 def
+/PatHeight 1 def
+/Multi 2 def
+/PaintData [
+  { clippath } bind
+  { 32 16 true [ 32 0 0 -16 0 16 ]
+	{<c000c000300030000c000c000300030000c000c000300030
+	000c000c00030003c000c000300030000c000c0003000300
+	00c000c000300030000c000c00030003>}
+     imagemask } bind
+] def
+/PaintProc {
+	pop
+	exec fill
+} def
+currentdict
+end
+/P1 exch def
+
+% right30
+11 dict begin
+/PaintType 1 def
+/PatternType 1 def
+/TilingType 1 def
+/BBox [0 0 1 1] def
+/XStep 1 def
+/YStep 1 def
+/PatWidth 1 def
+/PatHeight 1 def
+/Multi 2 def
+/PaintData [
+  { clippath } bind
+  { 32 16 true [ 32 0 0 -16 0 16 ]
+	{<00030003000c000c0030003000c000c0030003000c000c00
+	30003000c000c00000030003000c000c0030003000c000c0
+	030003000c000c0030003000c000c000>}
+     imagemask } bind
+] def
+/PaintProc {
+	pop
+	exec fill
+} def
+currentdict
+end
+/P2 exch def
+
+/cp {closepath} bind def
+/ef {eofill} bind def
+/gr {grestore} bind def
+/gs {gsave} bind def
+/sa {save} bind def
+/rs {restore} bind def
+/l {lineto} bind def
+/m {moveto} bind def
+/rm {rmoveto} bind def
+/n {newpath} bind def
+/s {stroke} bind def
+/sh {show} bind def
+/slc {setlinecap} bind def
+/slj {setlinejoin} bind def
+/slw {setlinewidth} bind def
+/srgb {setrgbcolor} bind def
+/rot {rotate} bind def
+/sc {scale} bind def
+/sd {setdash} bind def
+/ff {findfont} bind def
+/sf {setfont} bind def
+/scf {scalefont} bind def
+/sw {stringwidth} bind def
+/tr {translate} bind def
+/tnt {dup dup currentrgbcolor
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add srgb}
+  bind def
+/shd {dup dup currentrgbcolor 4 -2 roll mul 4 -2 roll mul
+  4 -2 roll mul srgb} bind def
+/$F2psBegin {$F2psDict begin /$F2psEnteredState save def} def
+/$F2psEnd {$F2psEnteredState restore end} def
+
+$F2psBegin
+%%Page: 1 1
+10 setmiterlimit
+ 0.06299 0.06299 sc
+%
+% Fig objects follow
+%
+% Polyline
+30.000 slw
+n 1410 675 m 1305 675 1305 7545 105 arcto 4 {pop} repeat
+  1305 7650 5925 7650 105 arcto 4 {pop} repeat
+  6030 7650 6030 780 105 arcto 4 {pop} repeat
+  6030 675 1410 675 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+% Polyline
+n 7665 675 m 7560 675 7560 7545 105 arcto 4 {pop} repeat
+  7560 7650 12180 7650 105 arcto 4 {pop} repeat
+  12285 7650 12285 780 105 arcto 4 {pop} repeat
+  12285 675 7665 675 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+% Polyline
+60.000 slw
+n 1365 630 m 1260 630 1260 8625 105 arcto 4 {pop} repeat
+  1260 8730 12225 8730 105 arcto 4 {pop} repeat
+  12330 8730 12330 735 105 arcto 4 {pop} repeat
+  12330 630 1365 630 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+% Polyline
+75.000 slw
+n 6120 720 m
+ 5895 495 l gs /PC [[1.00 1.00 1.00] [1.00 1.00 1.00]] def
+15.00 15.00 sc P1 [16 0 0 -8 393.00 33.00] PATmp PATsp ef gr PATusp gs col7 s gr 
+% Polyline
+n 7470 720 m
+ 7695 495 l gs /PC [[1.00 1.00 1.00] [1.00 1.00 1.00]] def
+15.00 15.00 sc P1 [16 0 0 -8 498.00 33.00] PATmp PATsp ef gr PATusp gs col7 s gr 
+% Polyline
+n 6075 675 m 7515 675 l 7515 495 l 6075 495 l
+ cp gs /PC [[1.00 1.00 1.00] [1.00 1.00 1.00]] def
+15.00 15.00 sc P1 [16 0 0 -8 405.00 33.00] PATmp PATsp ef gr PATusp gs col7 s gr 
+% Polyline
+30.000 slw
+n 1410 4005 m 1305 4005 1305 4800 105 arcto 4 {pop} repeat
+  1305 4905 5925 4905 105 arcto 4 {pop} repeat
+  6030 4905 6030 4110 105 arcto 4 {pop} repeat
+  6030 4005 1410 4005 105 arcto 4 {pop} repeat
+ cp gs col35 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 7665 4950 m 7560 4950 7560 5745 105 arcto 4 {pop} repeat
+  7560 5850 12180 5850 105 arcto 4 {pop} repeat
+  12285 5850 12285 5055 105 arcto 4 {pop} repeat
+  12285 4950 7665 4950 105 arcto 4 {pop} repeat
+ cp gs col34 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 1410 4905 m 1305 4905 1305 5700 105 arcto 4 {pop} repeat
+  1305 5805 5925 5805 105 arcto 4 {pop} repeat
+  6030 5805 6030 5010 105 arcto 4 {pop} repeat
+  6030 4905 1410 4905 105 arcto 4 {pop} repeat
+ cp gs col34 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 1410 5805 m 1305 5805 1305 7500 105 arcto 4 {pop} repeat
+  1305 7605 5880 7605 105 arcto 4 {pop} repeat
+  5985 7605 5985 5910 105 arcto 4 {pop} repeat
+  5985 5805 1410 5805 105 arcto 4 {pop} repeat
+ cp gs col32 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 1410 2790 m 1305 2790 1305 3900 105 arcto 4 {pop} repeat
+  1305 4005 2730 4005 105 arcto 4 {pop} repeat
+  2835 4005 2835 2895 105 arcto 4 {pop} repeat
+  2835 2790 1410 2790 105 arcto 4 {pop} repeat
+ cp gs col36 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 4560 2790 m 4455 2790 4455 3900 105 arcto 4 {pop} repeat
+  4455 4005 5880 4005 105 arcto 4 {pop} repeat
+  5985 4005 5985 2895 105 arcto 4 {pop} repeat
+  5985 2790 4560 2790 105 arcto 4 {pop} repeat
+ cp gs col36 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 7665 5850 m 7560 5850 7560 7545 105 arcto 4 {pop} repeat
+  7560 7650 12180 7650 105 arcto 4 {pop} repeat
+  12285 7650 12285 5955 105 arcto 4 {pop} repeat
+  12285 5850 7665 5850 105 arcto 4 {pop} repeat
+ cp gs col32 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 8880 5850 m 8775 5850 8775 6600 105 arcto 4 {pop} repeat
+  8775 6705 11055 6705 105 arcto 4 {pop} repeat
+  11160 6705 11160 5955 105 arcto 4 {pop} repeat
+  11160 5850 8880 5850 105 arcto 4 {pop} repeat
+ cp gs col33 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 9990 6705 m
+ 9990 7695 l gs col0 s gr 
+% Polyline
+60.000 slw
+n 1410 675 m 1305 675 1305 7545 105 arcto 4 {pop} repeat
+  1305 7650 5880 7650 105 arcto 4 {pop} repeat
+  5985 7650 5985 780 105 arcto 4 {pop} repeat
+  5985 675 1410 675 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+% Polyline
+n 7665 675 m 7560 675 7560 7545 105 arcto 4 {pop} repeat
+  7560 7650 12225 7650 105 arcto 4 {pop} repeat
+  12330 7650 12330 780 105 arcto 4 {pop} repeat
+  12330 675 7665 675 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+% Polyline
+n 7665 675 m 7560 675 7560 7545 105 arcto 4 {pop} repeat
+  7560 7650 12225 7650 105 arcto 4 {pop} repeat
+  12330 7650 12330 780 105 arcto 4 {pop} repeat
+  12330 675 7665 675 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+% Polyline
+n 7665 630 m 7560 630 7560 7545 105 arcto 4 {pop} repeat
+  7560 7650 12180 7650 105 arcto 4 {pop} repeat
+  12285 7650 12285 735 105 arcto 4 {pop} repeat
+  12285 630 7665 630 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+% Polyline
+n 7665 675 m 7560 675 7560 7545 105 arcto 4 {pop} repeat
+  7560 7650 12225 7650 105 arcto 4 {pop} repeat
+  12330 7650 12330 780 105 arcto 4 {pop} repeat
+  12330 675 7665 675 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+% Polyline
+n 7620 675 m 7515 675 7515 7545 105 arcto 4 {pop} repeat
+  7515 7650 12180 7650 105 arcto 4 {pop} repeat
+  12285 7650 12285 780 105 arcto 4 {pop} repeat
+  12285 675 7620 675 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+% Polyline
+30.000 slw
+n 1365 7695 m 1260 7695 1260 8625 105 arcto 4 {pop} repeat
+  1260 8730 12225 8730 105 arcto 4 {pop} repeat
+  12330 8730 12330 7800 105 arcto 4 {pop} repeat
+  12330 7695 1365 7695 105 arcto 4 {pop} repeat
+ cp gs /PC [[0.71 0.68 0.84] [0.00 0.00 0.00]] def
+15.00 15.00 sc P1 [16 0 0 -8 84.00 513.00] PATmp PATsp ef gr PATusp gs col0 s gr 
+% Polyline
+n 1410 5805 m 1305 5805 1305 6600 105 arcto 4 {pop} repeat
+  1305 6705 3675 6705 105 arcto 4 {pop} repeat
+  3780 6705 3780 5910 105 arcto 4 {pop} repeat
+  3780 5805 1410 5805 105 arcto 4 {pop} repeat
+ cp gs col33 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 2940 2790 m 2835 2790 2835 3900 105 arcto 4 {pop} repeat
+  2835 4005 4350 4005 105 arcto 4 {pop} repeat
+  4455 4005 4455 2895 105 arcto 4 {pop} repeat
+  4455 2790 2940 2790 105 arcto 4 {pop} repeat
+ cp gs col36 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 7665 4005 m 7560 4005 7560 4845 105 arcto 4 {pop} repeat
+  7560 4950 12180 4950 105 arcto 4 {pop} repeat
+  12285 4950 12285 4110 105 arcto 4 {pop} repeat
+  12285 4005 7665 4005 105 arcto 4 {pop} repeat
+ cp gs col35 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 7665 3015 m 7560 3015 7560 3900 105 arcto 4 {pop} repeat
+  7560 4005 12180 4005 105 arcto 4 {pop} repeat
+  12285 4005 12285 3120 105 arcto 4 {pop} repeat
+  12285 3015 7665 3015 105 arcto 4 {pop} repeat
+ cp gs col36 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 1365 7695 m 1260 7695 1260 8625 105 arcto 4 {pop} repeat
+  1260 8730 9885 8730 105 arcto 4 {pop} repeat
+  9990 8730 9990 7800 105 arcto 4 {pop} repeat
+  9990 7695 1365 7695 105 arcto 4 {pop} repeat
+ cp gs /PC [[0.71 0.68 0.84] [0.00 0.00 0.00]] def
+15.00 15.00 sc P2 [16 0 0 -8 84.00 513.00] PATmp PATsp ef gr PATusp gs col0 s gr 
+/Helvetica ff 420.00 scf sf
+9495 6390 m
+gs 1 -1 sc (Flows) col0 sh gr
+/Helvetica ff 420.00 scf sf
+4545 6930 m
+gs 1 -1 sc (BMI) col0 sh gr
+/Helvetica ff 420.00 scf sf
+10935 7245 m
+gs 1 -1 sc (Trove) col0 sh gr
+/Helvetica ff 420.00 scf sf
+8280 7245 m
+gs 1 -1 sc (BMI) col0 sh gr
+/Helvetica ff 420.00 scf sf
+4680 8415 m
+gs 1 -1 sc (System Network) col0 sh gr
+/Helvetica ff 390.00 scf sf
+10620 8370 m
+gs 1 -1 sc (Storage) col0 sh gr
+/Helvetica ff 420.00 scf sf
+1485 3330 m
+gs 1 -1 sc (Kernel) col0 sh gr
+/Helvetica ff 420.00 scf sf
+1485 3780 m
+gs 1 -1 sc (Driver) col0 sh gr
+/Helvetica-BoldOblique ff 540.00 scf sf
+7830 1935 m
+gs 1 -1 sc (PVFS v2 Server) col0 sh gr
+/Helvetica-BoldOblique ff 540.00 scf sf
+1485 1935 m
+gs 1 -1 sc (User Application) col0 sh gr
+/Helvetica ff 420.00 scf sf
+2925 3330 m
+gs 1 -1 sc (ROMIO) col0 sh gr
+/Helvetica ff 420.00 scf sf
+2970 3780 m
+gs 1 -1 sc (Device) col0 sh gr
+/Helvetica ff 420.00 scf sf
+4590 3780 m
+gs 1 -1 sc (Library) col0 sh gr
+/Helvetica ff 420.00 scf sf
+4590 3330 m
+gs 1 -1 sc (PVFS) col0 sh gr
+/Helvetica ff 420.00 scf sf
+1980 6390 m
+gs 1 -1 sc (Flows) col0 sh gr
+/Helvetica ff 420.00 scf sf
+8415 3645 m
+gs 1 -1 sc (Request Handler) col0 sh gr
+/Helvetica ff 420.00 scf sf
+8370 4590 m
+gs 1 -1 sc (Op State Machine) col0 sh gr
+/Helvetica ff 420.00 scf sf
+8775 5535 m
+gs 1 -1 sc (Job Manager) col0 sh gr
+/Helvetica ff 420.00 scf sf
+2070 4635 m
+gs 1 -1 sc (System Interface) col0 sh gr
+/Helvetica ff 420.00 scf sf
+2340 5490 m
+gs 1 -1 sc (Job manager) col0 sh gr
+$F2psEnd
+rs
+end
+
+%%EndDocument
+ @endspecial 1442 1366 a Fc(Figure)19 b(1:)25 b(PVFS2)c(components)42
+1633 y(step)h(becomes)f(a)h(job)m(.)29 b(The)21 b(job)g(manager)f(pro)o
+(vides)g(a)i(common)e(handle)h(space)g(\(terminology?\))27
+b(and)21 b(thread)f(management)g(to)42 1733 y(k)o(eep)g(e)n(v)o
+(erything)d(progressing.)42 1932 y(If)j(the)g(user)g(performs)e(a)j
+(data)f(operation,)e(the)i(system)g(interf)o(ace)f(will)i(submit)f(a)g
+(\003o)n(w)g(job)m(.)25 b(The)19 b(system)i(interf)o(ace)e(kno)n(ws)g
+(what)42 2032 y Fa(has)f Fc(to)f(happen)f(\226)i(some)f(bytes)g(from)g
+(here)g(ha)n(v)o(e)g(to)g(go)g(o)o(v)o(er)f(there.)24
+b(The)17 b(\003o)n(w)h(job)f(\002gures)g(out)g Fa(how)h
+Fc(to)f(accomplish)f(the)i(request.)42 2131 y(The)29
+b(\003o)n(w)g(can)g(compute)f(ho)n(w)g(much)g(data)h(comes)g(from)f
+(which)g(serv)o(ers)h(based)f(on)h(the)g(I/O)g(request)g(and)f(the)h
+(distrib)n(ution)42 2231 y(parameters.)24 b(The)c(\003o)n(w)g(then)g
+(is)h(responsible)e(for)g(making)g(the)h(right)g(BMI)h(calls)g(to)f(k)o
+(eep)g(the)g(i/o)g(request)g(progressing.)42 2430 y(Metadata)g
+(requests)g(go)g(directly)f(to)h(BMI)h(jobs.)k(...)g(\()p
+Fa(client)20 b(r)m(equests)g(will)h(ne)o(ver)f(go)g(dir)m(ectly)g(to)h
+(tr)l(o)o(ve)o(,)f(right?)25 b Fc(\))42 2630 y(W)m(ind)g(back)g(up)g
+(the)g(protocol)e(stack)j(to)f(the)g(serv)o(ers)g(for)g(a)g(moment.)39
+b(W)-7 b(e')o(ll)26 b(come)f(back)g(to)g(BMI)h(in)f(a)h(bit.)40
+b(From)25 b(the)g(client)42 2729 y(side,)19 b(all)g(jobs)f(are)g(\223e)
+o(xpected\224:)k(the)c(client)h(asks)f(for)g(something)e(to)j(happen)d
+(and)i(can)g(test)h(for)e(completion)g(of)h(that)g(job)m(.)24
+b(PVFS2)42 2829 y(serv)o(ers)k(can)f(additionally)f(recei)n(v)o(e)h
+(\223une)o(xpected\224)e(jobs,)30 b(generally)c(\(al)o(w)o(ays?\))48
+b(when)27 b(a)h(client)g(initiates)g(a)h(request)e(from)g(a)42
+2928 y(serv)o(er)-5 b(.)25 b(\()p Fa(wher)m(e)20 b(can)g(i)h(\002nd)e
+(mor)m(e)h(information)f(about)g(the)h(\223r)m(equest)g(handler\224)f
+(and)h(the)g(\223op)g(state)g(mac)o(hine\224)f(in)i(\002gur)m(e)e(1)h
+(?)26 b Fc(\))42 3128 y(The)21 b(job)g(manager)e(w)o(orks)i(the)g(same)
+g(w)o(ay)g(for)g(the)g(serv)o(er)f(as)i(it)g(does)f(for)f(the)h
+(client,)g(k)o(eeping)f(track)h(of)f(BMI,)i(tro)o(v)o(e,)d(and)i(\003o)
+n(w)42 3227 y(jobs.)42 3427 y(Figure)j(2)h(sho)n(ws)g(a)h(setmeta)f
+(operation.)37 b(The)24 b(client)h(starts)h(a)f(BMI)g(job)g(to)g(send)g
+(a)g(request)f(to)h(the)g(meta)g(serv)o(er)-5 b(.)38
+b(The)25 b(serv)o(er)42 3526 y(then)e(recei)n(v)o(es)g(a)h(job)f
+(indicating)f(that)i(an)f(une)o(xpected)e(BMI)j(message)g(has)f(arri)n
+(v)o(ed.)34 b(The)23 b(serv)o(er)f(then)h(issues)i(a)f(T)m(ro)o(v)o(e)e
+(job)h(to)42 3626 y(store)g(the)f(metadata,)g(and)g(issues)i(a)f(BMI)f
+(Job)h(to)f(send)h(an)f(ack.)32 b(The)22 b(client)g(does)h(a)g(BMI)f
+(job)h(to)f(recei)n(v)o(e)g(the)g(ack.)32 b(A)23 b(setmeta)42
+3725 y(requires)c(2)h(jobs)g(on)g(the)f(client)h(side)h(\(send)e
+(request,)g(recei)n(v)o(e)g(ack\),)g(and)g(3)h(jobs)g(on)g(the)g(serv)o
+(er)f(side)h(\(recei)n(v)o(e)e(request,)i(do)f(meta)42
+3825 y(operation,)i(send)h(ack\).)30 b Fa(\(hrm?)h(so)23
+b(\223une)n(xpected\224)d(isn')n(t)i(completely)g(true?)31
+b(the)22 b(server)h(e)n(xpects)g(a)f(r)m(equest)g(enough)e(to)j(post)f
+(a)42 3925 y(r)m(eceive)f(\))42 4124 y Fc(Data)h(operations)e(are)h
+(lar)o(gely)f(similar)i(to)f(metadata)g(operations:)26
+b(the)c(client)f(posts)h(jobs)f(to)h(send)f(the)g(request)g(and)g
+(recei)n(v)o(e)f(the)42 4224 y(response,)26 b(the)f(serv)o(er)g(posts)g
+(jobs)g(to)h(recei)n(v)o(e)e(the)i(request,)f(do)g(the)h(operation,)e
+(and)h(send)g(an)g(ack.)41 b(The)25 b(dif)n(ference)e(is)j(that)g(a)42
+4323 y(\003o)n(w)21 b(does)f(the)g(w)o(ork)f(of)h(mo)o(ving)e(data.)25
+b(\()c(XXX:)f(i)h(ha)n(v)o(e)f(a)g(\002gure)g(for)f(this.)26
+b(is)21 b(this)g(type)e(of)h(\002gure)g(useful?)k(\))42
+4522 y(Jobs)d(and)g(\003o)n(ws)g(use)g(BMI)h(abstractions)e(an)o(ytime)
+g(the)o(y)g(ha)n(v)o(e)g(to)i(communicate)c(o)o(v)o(er)i(the)h(netw)o
+(ork.)26 b(The)21 b(BMI)g(le)n(v)o(el)g(resolv)o(es)42
+4622 y(these)g(abstract)f(\224connections\224)e(into)i(real)g(netw)o
+(ork)f(acti)n(vity)-5 b(.)25 b(BMI)20 b(will)h(either)f(open)f(a)i(TCP)
+g(sock)o(et,)f(do)g(some)g(GM)h(magic,)e(or)42 4722 y(do)h(whate)n(v)o
+(er)f(the)h(underlying)d(system)k(netw)o(ork)e(needs)h(done)f(to)h(mo)o
+(v)o(e)f(bytes.)42 4921 y(Similarly)-5 b(,)22 b(jobs)g(and)f(\003o)n
+(ws)h(use)h(tro)o(v)o(e)d(abstractions)h(and)h(let)g(tro)o(v)o(e)f
+(deal)h(with)g(the)g(actual)g(storage)f(of)h(bytestream)f(and)g(k)o(e)o
+(yv)n(al)42 5021 y(objects)1926 5610 y(3)p eop end
+%%Page: 4 4
+TeXDict begin 4 3 bop 395 3262 a @beginspecial 0 @llx
+0 @lly 745 @urx 307 @ury 3725 @rwi @setspecial
+%%BeginDocument: figs/setmeta-protocol.eps
+%!PS-Adobe-2.0 EPSF-2.0
+%%Title: setmeta-protocol.eps
+%%Creator: fig2dev Version 3.2 Patchlevel 3c
+%%CreationDate: Thu May 30 15:00:10 2002
+%%For: robl@leela.mcs.anl.gov (Robert Latham,Argonne National Lab - MCS,,)
+%%BoundingBox: 0 0 745 307
+%%Magnification: 1.0000
+%%EndComments
+/$F2psDict 200 dict def
+$F2psDict begin
+$F2psDict /mtrx matrix put
+/col-1 {0 setgray} bind def
+/col0 {0.000 0.000 0.000 srgb} bind def
+/col1 {0.000 0.000 1.000 srgb} bind def
+/col2 {0.000 1.000 0.000 srgb} bind def
+/col3 {0.000 1.000 1.000 srgb} bind def
+/col4 {1.000 0.000 0.000 srgb} bind def
+/col5 {1.000 0.000 1.000 srgb} bind def
+/col6 {1.000 1.000 0.000 srgb} bind def
+/col7 {1.000 1.000 1.000 srgb} bind def
+/col8 {0.000 0.000 0.560 srgb} bind def
+/col9 {0.000 0.000 0.690 srgb} bind def
+/col10 {0.000 0.000 0.820 srgb} bind def
+/col11 {0.530 0.810 1.000 srgb} bind def
+/col12 {0.000 0.560 0.000 srgb} bind def
+/col13 {0.000 0.690 0.000 srgb} bind def
+/col14 {0.000 0.820 0.000 srgb} bind def
+/col15 {0.000 0.560 0.560 srgb} bind def
+/col16 {0.000 0.690 0.690 srgb} bind def
+/col17 {0.000 0.820 0.820 srgb} bind def
+/col18 {0.560 0.000 0.000 srgb} bind def
+/col19 {0.690 0.000 0.000 srgb} bind def
+/col20 {0.820 0.000 0.000 srgb} bind def
+/col21 {0.560 0.000 0.560 srgb} bind def
+/col22 {0.690 0.000 0.690 srgb} bind def
+/col23 {0.820 0.000 0.820 srgb} bind def
+/col24 {0.500 0.190 0.000 srgb} bind def
+/col25 {0.630 0.250 0.000 srgb} bind def
+/col26 {0.750 0.380 0.000 srgb} bind def
+/col27 {1.000 0.500 0.500 srgb} bind def
+/col28 {1.000 0.630 0.630 srgb} bind def
+/col29 {1.000 0.750 0.750 srgb} bind def
+/col30 {1.000 0.880 0.880 srgb} bind def
+/col31 {1.000 0.840 0.000 srgb} bind def
+
+end
+save
+newpath 0 307 moveto 0 0 lineto 745 0 lineto 745 307 lineto closepath clip newpath
+-21.0 325.0 translate
+1 -1 scale
+
+/cp {closepath} bind def
+/ef {eofill} bind def
+/gr {grestore} bind def
+/gs {gsave} bind def
+/sa {save} bind def
+/rs {restore} bind def
+/l {lineto} bind def
+/m {moveto} bind def
+/rm {rmoveto} bind def
+/n {newpath} bind def
+/s {stroke} bind def
+/sh {show} bind def
+/slc {setlinecap} bind def
+/slj {setlinejoin} bind def
+/slw {setlinewidth} bind def
+/srgb {setrgbcolor} bind def
+/rot {rotate} bind def
+/sc {scale} bind def
+/sd {setdash} bind def
+/ff {findfont} bind def
+/sf {setfont} bind def
+/scf {scalefont} bind def
+/sw {stringwidth} bind def
+/tr {translate} bind def
+/tnt {dup dup currentrgbcolor
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add srgb}
+  bind def
+/shd {dup dup currentrgbcolor 4 -2 roll mul 4 -2 roll mul
+  4 -2 roll mul srgb} bind def
+/$F2psBegin {$F2psDict begin /$F2psEnteredState save def} def
+/$F2psEnd {$F2psEnteredState restore end} def
+
+$F2psBegin
+%%Page: 1 1
+10 setmiterlimit
+ 0.06000 0.06000 sc
+%
+% Fig objects follow
+%
+% Polyline
+7.500 slw
+gs  clippath
+3615 1530 m 3615 1470 l 3414 1470 l 3534 1500 l 3414 1530 l cp
+eoclip
+n 2400 1500 m
+ 3600 1500 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 3414 1530 m 3534 1500 l 3414 1470 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+2415 1230 m 2415 1170 l 2214 1170 l 2334 1200 l 2214 1230 l cp
+eoclip
+n 1200 1200 m
+ 2400 1200 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 2214 1230 m 2334 1200 l 2214 1170 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+4815 1830 m 4815 1770 l 4614 1770 l 4734 1800 l 4614 1830 l cp
+eoclip
+n 3600 1800 m
+ 4800 1800 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 4614 1830 m 4734 1800 l 4614 1770 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+4815 2130 m 4815 2070 l 4614 2070 l 4734 2100 l 4614 2130 l cp
+eoclip
+n 3600 2100 m 3675 2100 l 3750 2100 l 3825 2100 l 3900 2100 l 3975 2100 l
+ 4050 2100 l 4125 2100 l 4200 2100 l 4275 2100 l 4350 2100 l
+ 4425 2100 l 4500 2100 l 4575 2100 l 4650 2100 l 4725 2100 l
+
+ 4800 2100 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 4614 2130 m 4734 2100 l 4614 2070 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+4785 2745 m 4785 2805 l 4986 2805 l 4866 2775 l 4986 2745 l cp
+eoclip
+n 7200 2775 m
+ 4800 2775 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 4986 2745 m 4866 2775 l 4986 2805 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+9615 3105 m 9615 3045 l 9414 3045 l 9534 3075 l 9414 3105 l cp
+eoclip
+n 4800 3075 m
+ 9600 3075 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 9414 3105 m 9534 3075 l 9414 3045 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+10815 3405 m 10815 3345 l 10614 3345 l 10734 3375 l 10614 3405 l cp
+eoclip
+n 9600 3375 m
+ 10800 3375 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 10614 3405 m 10734 3375 l 10614 3345 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+12015 3705 m 12015 3645 l 11814 3645 l 11934 3675 l 11814 3705 l cp
+eoclip
+n 10800 3675 m
+ 12000 3675 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 11814 3705 m 11934 3675 l 11814 3645 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+7215 2505 m 7215 2445 l 7014 2445 l 7134 2475 l 7014 2505 l cp
+eoclip
+n 4800 2475 m
+ 7200 2475 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 7014 2505 m 7134 2475 l 7014 2445 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+4785 3945 m 4785 4005 l 4986 4005 l 4866 3975 l 4986 3945 l cp
+eoclip
+n 12000 3975 m
+ 4800 3975 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 4986 3945 m 4866 3975 l 4986 4005 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+4785 4245 m 4785 4305 l 4986 4305 l 4866 4275 l 4986 4245 l cp
+eoclip
+n 12000 4275 m
+ 4800 4275 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 4986 4245 m 4866 4275 l 4986 4305 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+3585 4470 m 3585 4530 l 3786 4530 l 3666 4500 l 3786 4470 l cp
+eoclip
+n 4800 4500 m
+ 3600 4500 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 3786 4470 m 3666 4500 l 3786 4530 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+2385 4770 m 2385 4830 l 2586 4830 l 2466 4800 l 2586 4770 l cp
+eoclip
+n 3600 4800 m
+ 2400 4800 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 2586 4770 m 2466 4800 l 2586 4830 l  col0 s
+% Polyline
+7.500 slw
+gs  clippath
+1185 5070 m 1185 5130 l 1386 5130 l 1266 5100 l 1386 5070 l cp
+eoclip
+n 2400 5100 m
+ 1200 5100 l gs col0 s gr gr
+
+% arrowhead
+30.000 slw
+n 1386 5070 m 1266 5100 l 1386 5130 l  col0 s
+/Helvetica-Oblique ff 150.00 scf sf
+3750 1725 m
+gs 1 -1 sc (send req) col0 sh gr
+/Helvetica-Oblique ff 150.00 scf sf
+3825 2025 m
+gs 1 -1 sc (rcv ack) col0 sh gr
+/Helvetica-Oblique ff 150.00 scf sf
+4950 2400 m
+gs 1 -1 sc (request) col0 sh gr
+/Helvetica-Oblique ff 150.00 scf sf
+5100 2700 m
+gs 1 -1 sc (unexpected BMI message) col0 sh gr
+/Helvetica-Oblique ff 150.00 scf sf
+6150 3900 m
+gs 1 -1 sc (trove request) col0 sh gr
+/Helvetica-Oblique ff 150.00 scf sf
+6225 4275 m
+gs 1 -1 sc (ack request) col0 sh gr
+/Helvetica-Oblique ff 150.00 scf sf
+5250 3000 m
+gs 1 -1 sc (do_meta operation) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+10050 675 m
+gs 1 -1 sc (REQ HANDLER) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+8775 450 m
+gs 1 -1 sc (OP STATE MACH.) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+11325 450 m
+gs 1 -1 sc (PVFS2 SERVER) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+5700 675 m
+gs 1 -1 sc (FLOWS) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+8100 675 m
+gs 1 -1 sc (TROVE) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+7050 450 m
+gs 1 -1 sc (BMI) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+2250 450 m
+gs 1 -1 sc (API) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+975 675 m
+gs 1 -1 sc (USER) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+4200 450 m
+gs 1 -1 sc (JOB INTERFACE) col0 sh gr
+/Times-Roman ff 180.00 scf sf
+3075 675 m
+gs 1 -1 sc (SYS INTERFACE) col0 sh gr
+% Polyline
+7.500 slw
+n 375 750 m
+ 12750 750 l gs col0 s gr 
+% Polyline
+n 4800 750 m
+ 4800 5400 l gs col0 s gr 
+% Polyline
+n 6000 750 m
+ 6000 5400 l gs col0 s gr 
+% Polyline
+n 7200 750 m
+ 7200 5400 l gs col0 s gr 
+% Polyline
+n 1200 750 m
+ 1200 5400 l gs col0 s gr 
+% Polyline
+n 3600 750 m
+ 3600 5400 l gs col0 s gr 
+% Polyline
+n 2400 750 m
+ 2400 5400 l gs col0 s gr 
+% Polyline
+n 8400 750 m
+ 8400 5400 l gs col0 s gr 
+% Polyline
+n 9600 750 m
+ 9600 5400 l gs col0 s gr 
+% Polyline
+n 10800 750 m
+ 10800 5400 l gs col0 s gr 
+% Polyline
+n 12000 750 m
+ 12000 5400 l gs col0 s gr 
+$F2psEnd
+rs
+
+%%EndDocument
+ @endspecial 1348 3445 a Fc(Figure)20 b(2:)25 b(PVFS2)c(setmeta)f
+(operation)1926 5610 y(4)p eop end
+%%Trailer
+
+userdict /end-hook known{end-hook}if
+%%EOF

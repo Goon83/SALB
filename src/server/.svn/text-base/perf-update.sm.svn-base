@@ -1,0 +1,387 @@
+#include "pint-util.h"
+
+#include "pint-cached-config.h"
+#include "pvfs2-server.h"
+#include "pint-perf-counter.h"
+#include "server-config.h"
+
+
+
+
+#define MIG_THRESHOLD 1024*24
+#define BALANCE_THRESHOLD 0.8
+
+//Maximum NIC 10m/s
+//#define LOAD_THRESHOLD 35    
+
+/* default access size of client */
+char        access_size[10] = "128k"; 
+
+double      global_max_load_access_size = 20;
+
+/*  > 40M,  to gather lod */
+double      load_threshold = 40;   	 
+
+/*  < 80% to init file migration */
+double      balance_threshold = 0.8;	 
+
+
+
+/*
+ * record migration happen
+ * 0: migration
+ * 1: no migration
+ */
+int         migration_happen = 0;       
+
+/*
+ * record load collection happen
+ * 0: load collection
+ * 1: no load collection
+ */
+int         load_collection_happen = 0; 
+
+/* 
+ *  
+ */
+int           candidate_find; 
+
+/*
+ * The file with rt_handle is used to test 
+ * response time, requiring no migration happened
+ * to it
+ */
+PVFS_handle rt_handle = 0;               
+
+
+
+
+#define SERVER_NUM_MAX  4
+#define HISTORY_MAX 1
+
+
+
+enum{
+	LOW_LOAD     = 200,
+	HIGH_LOAD    ,
+	MIG_DATAFILE ,
+	NO_MIG       ,
+	LB_ENABLE    ,
+	LB_DISABLE
+};
+
+PVFS_handle          migrating_handle = 0;
+int                  server_lb_enable = 0; 
+extern double        load_diff;
+extern double        g_high_load;
+extern double        g_low_load;
+
+
+%%
+
+
+machine pvfs2_perf_update_sm
+{
+	state init_perf 
+	{
+		run init_perf_fun;
+		LB_ENABLE => load_predict;
+		LB_DISABLE => finalize;
+	default => error;
+	}
+	
+	
+	state load_predict
+        {
+		run ar_predict_fun;
+		LOW_LOAD  => finalize;
+		HIGH_LOAD => srv_load_collect;
+	        default   => error;	 
+	}
+
+	state srv_load_collect
+	{
+		jump pvfs2_perf_mon_client_sm;
+		success => mig_decide;
+	default => error;	 
+	}
+
+	state mig_decide
+	{
+		run mig_decide_fun;
+		MIG_DATAFILE  => do_migration;
+	default => finalize;
+	}
+
+	state do_migration
+	{
+		jump pvfs2_migrate_file_sm;
+		success  => finalize;
+	default => error;
+	}
+
+
+	state  finalize
+	{
+		run post_timer_fun;
+		success => init_perf;
+	default => error;
+	}
+
+	state error 
+	{
+		run perf_update_error;
+	default => terminate;
+	}
+}
+
+%%
+
+
+
+static PINT_sm_action init_perf_fun(
+	struct PINT_smcb *smcb, job_status_s *js_p)
+{
+	uint64_t current_mask = 0;
+	int current_debug_on = 0;
+	char* tmp_text;
+	char* ptr;
+	char* token;
+	char delim[] = "\n";
+	
+
+	
+	/* log current statistics if the gossip mask permits */
+	gossip_get_debug_mask(&current_debug_on, &current_mask);
+	if(current_mask & GOSSIP_PERFCOUNTER_DEBUG)
+	  {
+		tmp_text = PINT_perf_generate_text(PINT_server_pc, 4096);
+		if(tmp_text)
+		{
+			token = strtok_r(tmp_text, delim, &ptr);
+			while(token)
+			{
+				gossip_perf_log("%s\n", token);
+				token = strtok_r(NULL, delim, &ptr);
+			}
+			free(tmp_text);
+		}
+	}
+	
+	/* roll over to next set of statistics */
+	PINT_perf_rollover(PINT_server_pc);
+	
+	//gossip_debug(GOSSIP_LB_DEBUG,"Access size: %s, Response time %f \n", access_size,  PINT_load_vs_response_function(access_size, 0.4));
+	
+	/* gather detail information per file handle */
+	//PINT_gather_detail(PINT_server_pc_detail);
+
+    
+	if (server_lb_enable == 1){
+	        js_p->error_code = LB_ENABLE;
+	}else{
+		/* Invoke ar prediction model */
+		global_forecast_load = PINT_perf_ar_predict(PINT_server_pc, migration_happen, load_collection_happen, candidate_find);
+		js_p->error_code = LB_DISABLE;
+	}
+	
+
+	return SM_ACTION_COMPLETE;
+
+}
+
+
+static PINT_sm_action ar_predict_fun( 
+	struct PINT_smcb *smcb, job_status_s *js_p)
+{
+        /* Invoke ar prediction model */
+	global_forecast_load = PINT_perf_ar_predict(PINT_server_pc, migration_happen, load_collection_happen, candidate_find);
+	migration_happen = 0;
+	load_collection_happen = 0;
+	candidate_find = 0;
+
+        /* Compare forcast load with threshold */
+	if( global_forecast_load >= load_threshold){
+		js_p->error_code = HIGH_LOAD;
+		load_collection_happen = 1;
+        }else{
+		js_p->error_code = LOW_LOAD;
+	}
+	
+	return SM_ACTION_COMPLETE;
+}
+
+
+static PINT_sm_action mig_decide_fun(
+	struct PINT_smcb *smcb, job_status_s *js_p)
+{
+
+
+	struct PINT_server_op *s_op = PINT_sm_frame(smcb, PINT_FRAME_CURRENT);   
+
+
+	double balance_rate;
+	double max_load;
+	double min_load;
+	double sum_load;
+	int max_load_index;
+	int min_load_index;
+	int i;
+
+
+	max_load = 0;
+	sum_load = 0;
+	min_load = 0xFFFFFFFF;
+	max_load_index = 0;
+	min_load_index = 0;
+	
+	/*
+	 *Migration on the way
+	 */
+	if (mig_state == 1){
+		js_p->error_code = 0;
+		return  SM_ACTION_COMPLETE;
+	}
+
+	if (perf_load_matrix == NULL){
+		return(-1);
+	}
+	
+	/*
+	 * Handle load list
+	 */
+	double tmp_load = 0;
+	for (i = 0; i < io_server_count; i++){
+		/*
+		 *The load = 0xFFFFFFFF when the migration happen at the server
+		 */
+		if (perf_load_matrix[i][0].write == 0xFFFFFFFF ){
+			continue;
+		}
+        
+	        /* Fix me: add double transfer in BMI, I just tansfer double * 10000 to int server on server side
+		 *        here tansfer back to int 
+		 */
+		tmp_load = ((double)(perf_load_matrix[i][0].write +  perf_load_matrix[i][0].read)/10000.0);
+		sum_load = sum_load + tmp_load;
+		
+		if (max_load  < tmp_load){
+			max_load = tmp_load;
+			max_load_index = i;
+		}
+		
+		if (min_load > tmp_load){
+			min_load = tmp_load;
+			min_load_index = i;
+		}
+	}
+	
+
+	/* My load */
+	double my_load;
+	my_load = global_forecast_load;
+    
+        /* i am the hottest?
+	 *   yes: to compute balance rate
+	 *   no : just return;
+	 */
+	sum_load = my_load + sum_load;
+	if (my_load > max_load ){
+		max_load = my_load;
+		balance_rate = ((double)(sum_load / (io_server_count + 1.0)))/ max_load;
+        }else{
+		mig_state = 0;
+		balance_rate =((double) (sum_load / (io_server_count + 1.0)))/ max_load;
+		js_p->error_code = 0;
+		migration_happen = 0;
+		return SM_ACTION_COMPLETE;
+	}
+
+
+    
+	/*
+	 *  I am the hotest here
+	 *  if balance_rate < BLANCE_THRESHOLD, then invoke migration
+	 *  
+	 */
+	load_diff = (my_load -  (perf_load_matrix[min_load_index][0].write +  perf_load_matrix[min_load_index][0].read)/10000.0) / 2;
+    
+	g_high_load  = my_load ;
+	g_low_load  = (perf_load_matrix[min_load_index][0].write +  perf_load_matrix[min_load_index][0].read)/10000.0;
+	if(balance_rate < balance_threshold){
+		s_op->msgarray_op.msgpair.svr_addr = perf_load_addr_array[min_load_index];
+		mig_state = 1;	/* global */
+		migration_happen = 1;
+		js_p->error_code = MIG_DATAFILE;
+	}else{
+		migration_happen = 0;
+		js_p->error_code = 0;
+	}
+
+	return SM_ACTION_COMPLETE;
+}
+
+static PINT_sm_action post_timer_fun(
+	struct PINT_smcb *smcb, job_status_s *js_p)
+{
+	job_id_t tmp_id;
+	struct server_configuration_s *user_opts = get_server_config_struct();
+	
+	/*
+	 *Clean migration state 
+	 */
+	mig_state = 0;
+	
+	/*
+	 * rest it to init state 
+	 */
+	PINT_reset_perf_counter_detail(PINT_server_pc_detail);
+	
+	/*
+	 * post timer
+	 */
+	return (job_req_sched_post_timer(user_opts->perf_update_interval,
+					 smcb,
+					 0,
+					 js_p,
+					 &tmp_id,
+					 server_job_context));
+}
+
+static PINT_sm_action perf_update_error(
+	struct PINT_smcb *smcb, job_status_s *js_p)
+{
+	gossip_err("Error: stopping server performance monitoring.\n");
+	
+	/*
+	 *Clean migration state 
+	 */
+	mig_state = 0;
+	
+	PINT_perf_finalize(PINT_server_pc);
+	PINT_perf_finalize_detail(PINT_server_pc_detail);
+	
+	return(server_state_machine_complete(smcb));
+}
+
+
+
+struct PINT_server_req_params pvfs2_perf_update_params =
+{
+	.string_name = "perf_update",
+	.state_machine = &pvfs2_perf_update_sm
+};
+
+
+
+/*
+ * Local variables:
+ *  mode: c
+ *  c-indent-level: 4
+ *  c-basic-offset: 4
+ * End:
+ *
+ * vim: ft=c ts=8 sts=4 sw=4 expandtab
+ */
+
+

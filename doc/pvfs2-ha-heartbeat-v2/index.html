@@ -1,0 +1,819 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>PVFS High Availability Clustering using Heartbeat 2.0</TITLE>
+<META NAME="description" CONTENT="PVFS High Availability Clustering using Heartbeat 2.0">
+<META NAME="keywords" CONTENT="pvfs2-ha-heartbeat-v2">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="pvfs2-ha-heartbeat-v2.css">
+
+</HEAD>
+
+<BODY bgcolor="#b8b8b8" alink="#000000" vlink="#000000" link="#000000">
+
+<!--#include virtual="top_of_page.html" -->
+
+<table width="95%" class="tabletype1" cellpadding="0" cellspacing="0" align="center">
+<tr>
+<td>
+<table width="100%" cellspacing="0" cellpadding="1">
+<tr>                                                          
+<td class="nav_white" width="70%" valign="top">               
+<br>
+
+<table cellspacing="0" cellpadding="1" align="center" width="70%">
+<tr>
+<td width="80%" valign="top">
+
+<P>
+<H1 ALIGN="CENTER">PVFS High Availability Clustering using Heartbeat 2.0</H1>
+<DIV CLASS="author_info">
+
+<P ALIGN="CENTER"><STRONG>2008</STRONG></P>
+</DIV>
+
+<P>
+<BR>
+
+<H2><A NAME="SECTION00010000000000000000">
+Contents</A>
+</H2>
+<!--Table of Contents-->
+
+<UL CLASS="TofC">
+<LI><A NAME="tex2html31"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00020000000000000000">1 Introduction</A>
+<LI><A NAME="tex2html32"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00030000000000000000">2 Requirements</A>
+<UL>
+<LI><A NAME="tex2html33"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00031000000000000000">2.1 Hardware</A>
+<LI><A NAME="tex2html34"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00032000000000000000">2.2 Software</A>
+<LI><A NAME="tex2html35"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00033000000000000000">2.3 Network</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html36"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00040000000000000000">3 Configuring PVFS</A>
+<LI><A NAME="tex2html37"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00050000000000000000">4 Configuring storage</A>
+<LI><A NAME="tex2html38"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00060000000000000000">5 Configuring stonith</A>
+<LI><A NAME="tex2html39"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00070000000000000000">6 Distributing Heartbeat scripts</A>
+<LI><A NAME="tex2html40"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00080000000000000000">7 Base Heartbeat configuration</A>
+<LI><A NAME="tex2html41"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00090000000000000000">8 CIB configuration</A>
+<UL>
+<LI><A NAME="tex2html42"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00091000000000000000">8.1 crm_config</A>
+<LI><A NAME="tex2html43"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00092000000000000000">8.2 nodes</A>
+<LI><A NAME="tex2html44"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00093000000000000000">8.3 resources and groups</A>
+<LI><A NAME="tex2html45"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00094000000000000000">8.4 IPaddr</A>
+<LI><A NAME="tex2html46"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00095000000000000000">8.5 Filesystem</A>
+<LI><A NAME="tex2html47"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00096000000000000000">8.6 PVFS</A>
+<LI><A NAME="tex2html48"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00097000000000000000">8.7 rsc_location</A>
+<LI><A NAME="tex2html49"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00098000000000000000">8.8 rsc_order</A>
+<LI><A NAME="tex2html50"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION00099000000000000000">8.9 stonith</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html51"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION000100000000000000000">9 Starting Heartbeat</A>
+<LI><A NAME="tex2html52"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION000110000000000000000">10 Mounting the file system</A>
+<LI><A NAME="tex2html53"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION000120000000000000000">11 What happens during failover</A>
+<LI><A NAME="tex2html54"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION000130000000000000000">12 Controlling Heartbeat</A>
+<LI><A NAME="tex2html55"
+  HREF="pvfs2-ha-heartbeat-v2.html#SECTION000140000000000000000">13 Additional examples</A>
+</UL>
+<!--End of Table of Contents-->
+<P>
+
+<P>
+
+<H1><A NAME="SECTION00020000000000000000">
+<SPAN CLASS="arabic">1</SPAN> Introduction</A>
+</H1>
+
+<P>
+This document describes how to configure PVFS for high availability
+using Heartbeat version 2.x from www.linux-ha.org.  
+
+<P>
+The combination of PVFS and Heartbeat can support an arbitrary number
+of active server nodes and an arbitrary number of passive spare nodes.
+Spare nodes are not required unless you wish to avoid performance
+degradation upon failure.  As configured in this document, PVFS will
+be able to tolerate <!-- MATH
+ $\lceil ((N/2)-1) \rceil$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="109" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
+ SRC="img1.png"
+ ALT="$\lceil ((N/2)-1) \rceil$"></SPAN> node failures, where N is
+the number of nodes present in the Heartbeat cluster including spares.
+Over half of the nodes must be available in order to reach a quorum and
+decide if another node has failed.
+
+<P>
+Heartbeat can be configured to monitor IP connectivity, storage hardware
+connectivity, and responsiveness of the PVFS daemons.  Failure of any of
+these components will trigger a node level failover event.  PVFS clients
+will transparently continue operation following a failover.
+
+<P>
+No modifications of PVFS are required.  Example scripts referenced in
+this document are available in the <TT>examples/heartbeat</TT> directory of
+the PVFS source tree.
+
+<P>
+
+<H1><A NAME="SECTION00030000000000000000">
+<SPAN CLASS="arabic">2</SPAN> Requirements</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION00031000000000000000">
+<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN> Hardware</A>
+</H2>
+
+<P>
+
+<H3><A NAME="SECTION00031100000000000000">
+<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN>.<SPAN CLASS="arabic">1</SPAN> Nodes</A>
+</H3>
+
+<P>
+Any number of nodes may be configured, although you need at least three
+total in order to tolerate a failure.  You may also use any number of
+spare nodes.  A spare node is a node that does not run any services until
+a failover occurs.  If you have one or more spares, then they will be
+selected first to run resources in a failover situation.  If you have
+no spares (or all spares are exhausted), then at least one node will
+have to run two services simultaneously, which may degrade performance.
+
+<P>
+The examples in this document will use 4 active nodes and 1 spare node,
+for a total of 5 nodes.  Heartbeat has been tested with up to 16 nodes
+in configurations similar to the one outlined in this document.
+
+<P>
+
+<H3><A NAME="SECTION00031200000000000000">
+<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN>.<SPAN CLASS="arabic">2</SPAN> Storage</A>
+</H3>
+
+<P>
+A shared storage device is required.  The storage must be configured
+to allocate a separate block device to each PVFS daemon, and all nodes
+(including spares) must be capable of accessing all block devices.
+
+<P>
+One way of achieving this is by using a SAN.  In the examples used in this
+document, the SAN has been divided into 4 LUNs.  Each of the 5 nodes in
+the cluster is capable of mounting all 4 LUNs.  The Heartbeat software
+will insure that a given LUN is mounted in only one location at a time.
+
+<P>
+Each block device should be formatted with a local file system.
+This document assumes the use of ext3.  Unique labels should be set on
+each file system (for example, using the <TT>-L</TT> argument to
+<TT>mke2fs</TT> or <TT>tune2fs</TT>).  This will allow the block devices
+to be mounted by consistent labels regardless of how Linux assigned
+device file names to the devices.
+
+<P>
+
+<H3><A NAME="SECTION00031300000000000000">
+<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN>.<SPAN CLASS="arabic">3</SPAN> Stonith</A>
+</H3>
+
+<P>
+Heartbeat needs some mechanism to fence or stonith a failed node.
+Two popular ways to do this are either to use IPMI or a network
+controllable power strip.  Each node needs to have a mechanism available
+to reset any other node in the cluster.  The example configuration in
+this document uses IPMI.
+
+<P>
+It is possible to configure PVFS and Heartbeat without a power control
+device.  However, if you deploy this configuration for any purpose other
+than evaluation, then you run a very serious risk of data
+corruption.   Without stonith, there is no way to guarantee that a
+failed node has completely shutdown and stopped accessing its
+storage device before failing over.
+
+<P>
+
+<H2><A NAME="SECTION00032000000000000000">
+<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">2</SPAN> Software</A>
+</H2>
+
+<P>
+This document assumes that you are using Heartbeat version 2.1.3,
+and PVFS version 2.7.x or greater.  You may also wish to use example
+scripts included in the <TT>examples/heartbeat</TT> directory of the
+PVFS source tree.
+
+<P>
+
+<H2><A NAME="SECTION00033000000000000000">
+<SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">3</SPAN> Network</A>
+</H2>
+
+<P>
+There are two special issues regarding the network configuration to be
+used with Heartbeat.  First of all, you must allocate a multicast
+address to use for communication within the cluster nodes.
+
+<P>
+Secondly, you need to allocate an extra IP address and hostname for each
+PVFS daemon.  In the example that this document uses, we must allocate 4
+extra IP addresses, along with 4 hostnames in DNS for those IP addresses.
+In this document, we will refer to these as ``virtual addresses'' or
+``virtual hostnames''.  Each active PVFS server will be configured
+to automatically bring up one of these virtual addresses to use for
+communication.  If the node fails, then that IP address is migrated to
+another node so that clients will appear to communicate with the same
+server regardless of where it fails over to.  It is important that you
+<SPAN  CLASS="textit">not</SPAN> use the primary IP address of each node for this purpose.
+
+<P>
+In the example in this document, we use 225.0.0.1 as the multicast
+address, node{1-5} as the normal node hostnames,
+virtual{1-4} as the virtual hostnames, and 192.168.0.{1-4} as the
+virtual addresses.
+
+<P>
+Note that the virtual addresses must be on the same subnet as the true
+IP addresses for the nodes.
+
+<P>
+
+<H1><A NAME="SECTION00040000000000000000">
+<SPAN CLASS="arabic">3</SPAN> Configuring PVFS</A>
+</H1>
+
+<P>
+Download, build, and install PVFS on all server nodes.  Configure PVFS
+for use on each of the active nodes.  
+
+<P>
+There are a few points to consider when configuring PVFS:
+
+<UL>
+<LI>Use the virtual hostnames when specifying meta servers and I/O
+servers
+</LI>
+<LI>Synchronize file data on every operation (necessary for consistency on
+failover)
+</LI>
+<LI>Synchronize meta data on every operation (necessary for consistency on
+failover).  Coalescing is allowed.
+</LI>
+<LI>Use the <TT>TCPBindSpecific</TT> option (this allows multiple daemons to
+run on the same node using different virtual addresses)
+</LI>
+<LI>Tune retry and timeout values appropriately for your system.  This
+may depend on how long it takes for your power control device to safely
+shutdown a node.
+</LI>
+</UL>
+
+<P>
+An example PVFS configuration is shown below including the sections
+relevant to Heartbeat:
+
+<P>
+<PRE>
+&lt;Defaults&gt;
+        ...
+        ServerJobBMITimeoutSecs 30
+        ServerJobFlowTimeoutSecs 30
+        ClientJobBMITimeoutSecs 30
+        ClientJobFlowTimeoutSecs 30
+        ClientRetryLimit 5
+        ClientRetryDelayMilliSecs 33000
+        TCPBindSpecific yes
+        ...
+&lt;/Defaults&gt;
+
+&lt;Aliases&gt;
+        Alias virtual1_tcp3334 tcp://virtual1:3334
+        Alias virtual2_tcp3334 tcp://virtual2:3334
+        Alias virtual3_tcp3334 tcp://virtual3:3334
+        Alias virtual4_tcp3334 tcp://virtual4:3334
+&lt;/Aliases&gt;
+
+&lt;Filesystem&gt;
+        ...
+        &lt;MetaHandleRanges&gt;
+                Range virtual1_tcp3334 4-536870914
+                Range virtual2_tcp3334 536870915-1073741825
+                Range virtual3_tcp3334 1073741826-1610612736
+                Range virtual4_tcp3334 1610612737-2147483647
+        &lt;/MetaHandleRanges&gt;
+        &lt;DataHandleRanges&gt;
+                Range virtual1_tcp3334 2147483648-2684354558
+                Range virtual2_tcp3334 2684354559-3221225469
+                Range virtual3_tcp3334 3221225470-3758096380
+                Range virtual4_tcp3334 3758096381-4294967291
+        &lt;/DataHandleRanges&gt;
+        &lt;StorageHints&gt;
+                TroveSyncMeta yes
+                TroveSyncData yes
+        &lt;/StorageHints&gt;
+</PRE>
+
+<P>
+Download, build, and install Heartbeat following the instructions on
+their web site.  No special parameters or options are required.  Do not
+start the Heartbeat service.
+
+<P>
+
+<H1><A NAME="SECTION00050000000000000000">
+<SPAN CLASS="arabic">4</SPAN> Configuring storage</A>
+</H1>
+
+<P>
+Make sure that there is a block device allocated for each active server
+in the file system.  Format each one with ext3.  Do not create a PVFS
+storage space yet, but you can create subdirectories within each file
+system if you wish.
+
+<P>
+Confirm that each block device can be mounted from every node using the
+file system label.  Do this one node at a time.  Never mount
+the same block device concurrently on two nodes.
+
+<P>
+
+<H1><A NAME="SECTION00060000000000000000">
+<SPAN CLASS="arabic">5</SPAN> Configuring stonith</A>
+</H1>
+
+<P>
+Make sure that your stonith device is accessible and responding from each
+node in the cluster.  For the IPMI stonith example used in this document,
+this means confirming that <TT>ipmitool</TT> is capable of monitoring
+each node.  Each node will have its own IPMI IP address, username, and
+password.
+
+<P>
+<PRE>
+$ ipmitool -I lan -U Administrator -P password -H 192.168.0.10 power status
+Chassis Power is on
+</PRE>
+
+<P>
+
+<H1><A NAME="SECTION00070000000000000000">
+<SPAN CLASS="arabic">6</SPAN> Distributing Heartbeat scripts</A>
+</H1>
+
+<P>
+The PVFS2 resource script must be installed and set as runnable on every
+cluster node as follows:
+
+<P>
+<PRE>
+$ mkdir -p /usr/lib/ocf/resource.d
+$ cp examples/heartbeat/PVFS2 /usr/lib/ocf/resource.d/external/
+$ chmod a+x /usr/lib/ocf/resource.d/external/PVFS2
+</PRE>
+
+<P>
+
+<H1><A NAME="SECTION00080000000000000000">
+<SPAN CLASS="arabic">7</SPAN> Base Heartbeat configuration</A>
+</H1>
+
+<P>
+This section describes how to configure the basic Heartbeat daemon
+parameters, which include an authentication key and a list of nodes that
+will participate in the cluster.
+
+<P>
+Begin by generating a random sha1 key, which is used to
+secure communication between the cluster nodes.  Then run the
+pvfs2-ha-heartbeat-configure.sh script on every node (both active
+and spare) as shown below.  Make sure to use the multicast address, sha1
+key, and list of nodes (including spares) appropriate for your environment.
+
+<P>
+<PRE>
+$ dd if=/dev/urandom count=4 2&gt;/dev/null | openssl dgst -sha1
+dcdebc13c41977eac8cca0023266a8b16d234262
+
+$ examples/heartbeat/pvfs2-ha-heartbeat-configure.sh /etc/ha.d 225.0.0.1 \
+  dcdebc13c41977eac8cca0023266a8b16d234262 \
+  node1 node2 node3 node4 node5
+</PRE>
+
+<P>
+You can view the configuration file that this generates in
+/etc/ha.d/ha.cf.  An example ha.cf file (with comments) is provided with
+the Heartbeat package if you wish to investigate how to add or change any settings.
+
+<P>
+
+<H1><A NAME="SECTION00090000000000000000">
+<SPAN CLASS="arabic">8</SPAN> CIB configuration</A>
+</H1>
+
+<P>
+<TT>Cluster Information Base</TT> (CIB) is the the mechanism that
+Heartbeat 2.x uses to store information about the resources that are 
+configured for high availability.  The configuration is stored in an
+XML format and automatically synchronized across all of the cluster
+nodes.
+
+<P>
+It is possible to start the Heartbeat services and then configure the
+CIB, but it is simpler to begin with a populated XML file on all nodes.
+
+<P>
+<TT>cib.xml.example</TT> provides an example of a fully populated
+Heartbeat configuration with 5 nodes and 4 active PVFS servers.  Relevant
+portions of the XML file are outlined below.
+
+<P>
+This file should be modified to reflect your configuration.  You can
+test the validity of the XML with the following commands before
+installing it.  The former checks generic XML syntax, while the latter
+performs Heartbeat specific checking:
+
+<P>
+<PRE>
+$ xmllint --noout cib.xml
+$ crm_verify -x cib.xml
+</PRE>
+
+<P>
+Once your XML is filled in correctly, it must be copied into the correct
+location (with correct ownership) on each node in the cluster:
+
+<P>
+<PRE>
+$ mkdir -p /var/lib/heartbeat/crm
+$ cp cib.xml /var/lib/heartbeat/crm
+$ chown -R hacluster:haclient /var/lib/heartbeat/crm
+</PRE>
+
+<P>
+Please note that once Heartbeat has been started, it is no longer
+legal to modify cib.xml by hand.  See the <TT>cibadmin</TT> command line
+tool and Heartbeat information on making modifications to
+existing or online CIB configurations.
+
+<P>
+
+<H2><A NAME="SECTION00091000000000000000">
+<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">1</SPAN> crm_config</A>
+</H2>
+
+<P>
+The <TT>crm_config</TT> portion of the CIB is used to set global
+parameters for Heartbeat.  This includes behavioral settings
+(such as how to respond if quorum is lost) as well as tunable parameters
+(such as timeout values).
+
+<P>
+The options selected in this section should work well as a starting
+point, but you may refer to the Heartbeat documentation for more
+details.
+
+<P>
+
+<H2><A NAME="SECTION00092000000000000000">
+<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">2</SPAN> nodes</A>
+</H2>
+
+<P>
+The <TT>nodes</TT> section is empty on purpose.  This will be filled in
+dynamically by the Heartbeat daemons.
+
+<P>
+
+<H2><A NAME="SECTION00093000000000000000">
+<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">3</SPAN> resources and groups</A>
+</H2>
+
+<P>
+The <TT>resources</TT> section describes all resources that the
+Heartbeat software needs to manage for failover purposes.  This includes
+IP addresses, SAN mount points, and <TT>pvfs2-server</TT> processes.  The
+resources are organized into groups, such as <TT>server0</TT>, to
+indicate that certain groups of resources should be treated as a single
+unit.  For example, if a node were to fail, you cannot just migrate its
+<TT>pvfs2-server</TT> process.  You must also migrate the associated IP address
+and SAN mount point at the same time.  Groups also make it easier to
+start or stop all associated resources for a node with one unified command.
+
+<P>
+In the example <TT>cib.xml</TT>, there are 4 groups (server0 through
+server3).  These represent the 4 active PVFS servers that will run on
+the cluster.
+
+<P>
+
+<H2><A NAME="SECTION00094000000000000000">
+<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">4</SPAN> IPaddr</A>
+</H2>
+
+<P>
+The <TT>IPaddr</TT> resources, such as <TT>server0_address</TT>, are
+used to indicate what virtual IP address should be used with each group.
+In this example, all IP addresses are allocated from a private range, but
+these should be replaced with IP addresses that are appropriate for use
+on your network.  See the network requirements section for more details.
+
+<P>
+
+<H2><A NAME="SECTION00095000000000000000">
+<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">5</SPAN> Filesystem</A>
+</H2>
+
+<P>
+The <TT>Filesystem</TT> resources, such as <TT>server0_fs</TT>, are used to
+describe the shared storage block devices that serve as back end storage
+for PVFS.  This is where the PVFS storage space for each server will
+be created.  In this example, the device names are labeled as
+<TT>label0</TT>
+through <TT>label3</TT>.  They are each mounted on directories such
+as <TT>/san_mount0</TT> through <TT>/san_mount3</TT>.  Please note
+that each device should be mounted on a different mount point to allow
+multiple <TT>pvfs2-server</TT> processes to operate on the same node without
+collision.  The file system type can be changed to reflect the use of
+alternative underlying file systems.
+
+<P>
+
+<H2><A NAME="SECTION00096000000000000000">
+<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">6</SPAN> PVFS</A>
+</H2>
+
+<P>
+The <TT>PVFS2</TT> resources, such as <TT>server0_daemon</TT>, are used
+to describe each <TT>pvfs2-server</TT> process.  This resource is provided by the
+PVFS2 script in the examples directory.  The parameters to this resource
+are listed below:
+
+<UL>
+<LI><TT>fsconfig</TT>: location of PVFS fs configuration file
+</LI>
+<LI><TT>port</TT>: TCP/IP port that the server will listen on (must match server
+configuration file)
+</LI>
+<LI><TT>ip</TT>: IP address that the server will listen on (must match both the file
+system configuration file and the IPAddr resource)
+</LI>
+<LI><TT>pidfile</TT>: Location where a pid file can be written
+</LI>
+<LI><TT>alias</TT>: alias to identify this PVFS daemon instance
+</LI>
+</UL>
+
+<P>
+Also notice that there is a monitor operation associated with the PVFS
+resource.  This will cause the <TT>pvfs2-check-server</TT> utility to be triggered
+periodically to make sure that the <TT>pvfs2-server</TT> process is not only
+running, but is correctly responding to PVFS protocol requests.  This
+allows problems such as hung <TT>pvfs2-server</TT> processes to be treated as
+failure conditions.
+
+<P>
+Please note that the PVFS2 script provided in the examples will attempt
+to create a storage space on startup for each server if it is not already present.
+
+<P>
+
+<H2><A NAME="SECTION00097000000000000000">
+<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">7</SPAN> rsc_location</A>
+</H2>
+
+<P>
+The <TT>rsc_location</TT> constraints, such as <TT>run_server0</TT>,
+are used to express a preference for where each resource group should
+run (if possible).  It may be useful for administrative purposes to have
+the first server group default to run on the first node of your cluster,
+for example.  Otherwise the placement will be left up to Heartbeat.
+
+<P>
+
+<H2><A NAME="SECTION00098000000000000000">
+<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">8</SPAN> rsc_order</A>
+</H2>
+
+<P>
+The <TT>rsc_order</TT> constraints, such as
+<TT>server0_order_start_fs</TT> can be used to dictate the order in
+which resources must be started or stopped.  The resources are already
+organized into groups, but without ordering constraints, the resources
+within a group may be started in any order relative to each other.
+These constraints are necessary because a <TT>pvfs2-server</TT> process will not
+start properly until its IP address and storage are available.
+
+<P>
+
+<H2><A NAME="SECTION00099000000000000000">
+<SPAN CLASS="arabic">8</SPAN>.<SPAN CLASS="arabic">9</SPAN> stonith</A>
+</H2>
+
+<P>
+The <TT>external/ipmi</TT> stonith device is used in this example.
+Please see the Heartbeat documentation for instructions on configuring
+other types of devices.
+
+<P>
+There is one IPMI stonith device for each node.  The attributes for that
+resources specify which node is being controlled, and the username,
+password, and IP address of corresponding IPMI device.
+
+<P>
+
+<H1><A NAME="SECTION000100000000000000000">
+<SPAN CLASS="arabic">9</SPAN> Starting Heartbeat</A>
+</H1>
+
+<P>
+Once the CIB file is completed and installed in the correct
+location, then the Heartbeat services can be started on every node.
+The <TT>crm_mon</TT> command, when run with the arguments shown,
+will provide a periodically updated view of the state of each resource
+configured within Heartbeat.  Check <TT>/var/log/messages</TT> if any
+of the groups fail to start.
+
+<P>
+<PRE>
+$ /etc/init.d/heartbeat start
+$ # wait a few minutes for heartbeat services to start
+$ crm_mon -r
+</PRE>
+
+<P>
+
+<H1><A NAME="SECTION000110000000000000000">
+<SPAN CLASS="arabic">10</SPAN> Mounting the file system</A>
+</H1>
+
+<P>
+Mounting PVFS with high availability is no different than mounting a
+normal PVFS file system, except that you must use the virtual hostname
+for the PVFS server rather than the primary hostname of the node:
+
+<P>
+<PRE>
+$ mount -t pvfs2 tcp://virtual1:3334/pvfs2-fs /mnt/pvfs2
+</PRE>
+
+<P>
+
+<H1><A NAME="SECTION000120000000000000000">
+<SPAN CLASS="arabic">11</SPAN> What happens during failover</A>
+</H1>
+
+<P>
+The following example illustrates the steps that occur when a node fails:
+
+<P>
+
+<OL>
+<LI>Node2 (which is running a <TT>pvfs2-server</TT> on the virtual2 IP
+address) suffers a failure
+</LI>
+<LI>Client node begins timeout/retry cycle
+</LI>
+<LI>Heartbeat services running on remaining nodes notice that node2
+is not responding
+</LI>
+<LI>After a timeout has elapsed, remaining nodes reach a quorum and
+vote to treat node2 as a failed node
+</LI>
+<LI>Node1 sends a stonith command to reset node2
+</LI>
+<LI>Node2 either reboots or remains powered off (depending on nature
+of failure)
+</LI>
+<LI>Once stonith command succeeds, node5 is selected to replace it
+</LI>
+<LI>The virtual2 IP address, mount point, and
+<TT>pvfs2-server</TT> service
+are started on node5
+</LI>
+<LI>Client node retry eventually succeeds, but now the network
+traffic is routed to node5
+</LI>
+</OL>
+
+<P>
+
+<H1><A NAME="SECTION000130000000000000000">
+<SPAN CLASS="arabic">12</SPAN> Controlling Heartbeat</A>
+</H1>
+
+<P>
+The Heartbeat software comes with a wide variety of tools for managing
+resources.  The following are a few useful examples:
+
+<UL>
+<LI><TT>cibadmin -Q</TT>: Display the current CIB information
+</LI>
+<LI><TT>crm_mon -r -1</TT>: Display the current resource status
+</LI>
+<LI><TT>crm_standby</TT>: Used to manually take a node in an out of
+standby mode.  This can be used to take a node offline for maintenance
+without a true failure event.
+</LI>
+<LI><TT>crm_resource</TT>: Modify resource information.  For example,
+<TT>crm_resource -r server0 -p target_role -v stopped</TT> will stop a
+particular resource group.
+</LI>
+<LI><TT>crm_verify</TT>: can be used to confirm if the CIB
+information is valid and consistent
+</LI>
+</UL>
+
+<P>
+
+<H1><A NAME="SECTION000140000000000000000">
+<SPAN CLASS="arabic">13</SPAN> Additional examples</A>
+</H1>
+
+<P>
+The <TT>examples/heartbeat/hardware-specific</TT> directory contains
+additional example scripts that may be helpful in some scenarios:
+
+<P>
+
+<UL>
+<LI><TT>pvfs2-stonith-plugin</TT>: An example stonith plugin
+that can use an arbitrary script to power off nodes.  May be used (for
+example) with the <TT>apc*</TT> and <TT>baytech*</TT> scripts to control
+remote controlled power strips if the scripts provided by Heartbeat are
+not sufficient.
+</LI>
+<LI><TT>Filesystem-qla-monitor</TT>: A modified version of the
+standard FileSystem resource that uses the <TT>qla-monitor.pl</TT>
+script to provide additional monitoring capability for QLogic fibre
+channel cards. 
+</LI>
+<LI><TT>PVFS2-notify</TT>: An example of a dummy resource that could
+be added to the configuration to perform additional logging or
+notification steps on startup.
+</LI>
+</UL>
+
+<P>
+
+<H1><A NAME="SECTION000150000000000000000">
+About this document ...</A>
+</H1>
+ <STRONG>PVFS High Availability Clustering using Heartbeat 2.0</STRONG><P>
+This document was generated using the
+<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 2002-2-1 (1.71)
+<P>
+Copyright &#169; 1993, 1994, 1995, 1996,
+Nikos Drakos, 
+Computer Based Learning Unit, University of Leeds.
+<BR>
+Copyright &#169; 1997, 1998, 1999,
+<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
+Mathematics Department, Macquarie University, Sydney.
+<P>
+The command line arguments were: <BR>
+ <STRONG>latex2html</STRONG> <TT>-split 0 -show_section_numbers -nonavigation -init_file /tmp/pvfs-2.8.2/doc/latex2html-init pvfs2-ha-heartbeat-v2.tex</TT>
+<P>
+The translation was initiated by Samuel Lang on 2010-02-04
+<BR><HR>
+<ADDRESS>
+Samuel Lang
+2010-02-04
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,643 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>PVFS2 High-Availability Clustering</TITLE>
+<META NAME="description" CONTENT="PVFS2 High-Availability Clustering">
+<META NAME="keywords" CONTENT="pvfs2-ha">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="pvfs2-ha.css">
+
+<? include("../../../../header.php"); ?></HEAD>
+
+<?include("../../../..//top.php"); ?> <body id="documentation">
+
+
+
+<table width="95%" class="tabletype1" cellpadding="0" cellspacing="0" align="left">
+<tr>
+<td>
+<table width="100%" cellspacing="0" cellpadding="1">
+<tr>                                                          
+<td class="nav_white" width="70%" valign="top">               
+<br>
+
+<table cellspacing="0" cellpadding="1" align="left" width="70%">
+<tr>
+<td width="80%" valign="top">
+
+<P>
+<H1 ALIGN="LEFT">PVFS2 High-Availability Clustering</H1>
+<DIV CLASS="author_info">
+
+<P ALIGN="LEFT"><STRONG>PVFS2 Development Team</STRONG></P>
+<P ALIGN="LEFT"><STRONG>June, 2004</STRONG></P>
+</DIV>
+
+<P>
+
+<H1><A NAME="SECTION00010000000000000000">
+<SPAN CLASS="arabic">1</SPAN> Introduction</A>
+</H1>
+We designed PVFS2 with performance in mind.  Software redundancy, while
+appealing for its cost and reliability, has a substantial impact on
+performance.  While we are thinking how best to design software
+redundancy, there will always be a performance cost.  Hardware-based
+failover is one way to achieve resistance to failures while maintaining
+high performance.  This document outlines how we set up a PVFS2
+high-availability cluster using free software.  First we will walk
+through setting up an active-passive system, then show what needs to be
+changed for a full active-active failover configuration.
+
+<P>
+Please send updates, suggestions, corrections, and especially any
+notes for other Linux distributions to
+<TT>pvfs2-developers@beowulf-underground.org</TT>
+
+<P>
+
+<H1><A NAME="SECTION00020000000000000000">
+<SPAN CLASS="arabic">2</SPAN> Hardware</A>
+</H1>
+
+<P>
+The whole point of failover is for one computer to take over the job of
+another if and when it dies (component failure, power cord unplugged,
+etc.).   The easiest way to achieve that is to have two
+identical machines with some sort of shared storage between them.
+Here's the hardware we used:
+
+<P>
+
+<UL>
+<LI>2 Dell PowerEdge 2650s, 
+	each with a PERC (PowerEdge Raid Controller) card
+	and 4 70 GB disks configured in RAID-5
+</LI>
+<LI>1 Dell PowerVault 220s
+	with 7 160 GB disks configured in RAID-5
+</LI>
+</UL>
+
+<P>
+It's conceivable that a Fibre Channel or Firewire drive would suffice for
+the shared storage device.  Reports of success or failure using such
+devices would be most welcome.
+
+<P>
+
+<H1><A NAME="SECTION00030000000000000000">
+<SPAN CLASS="arabic">3</SPAN> Software</A>
+</H1>
+
+<H2><A NAME="SECTION00031000000000000000">
+<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">1</SPAN> Installing the Operating System</A>
+</H2>
+Some preliminary notes about installing Linux (Debian) on this hardware:
+
+<P>
+
+<UL>
+<LI>We went with Debian on this system.  We figured if the software worked
+  on Debian, it would work on any distribution.  People who set this up
+  on other systems and had to do anything differently, please send
+  updates.
+
+<P>
+</LI>
+<LI>Debian's ``woody'' boot floppies don't recognize megaraid (PERC)
+  hardware raid, so we used the new debian-installer.  NOTE:
+  debian-installer test candidate 1 had a bug in base-system, so use
+  debian-installer beta 4 instead.  By the time you read this,
+  debian-installer will probably be fixed, but beta 4 is known to work
+  on this hardware.
+
+<P>
+</LI>
+<LI>Once Debian is installed, build a new kernel.  You can use
+  linux-2.4 or linux-2.6.  The failover tools we describe in this
+  document are userspace applications and work equally well with 2.4 and
+  2.6.  With linux-2.4, make sure to compile in support for
+  <TT>AIC_7XXX</TT> and <TT>MEGARAID2</TT> scsi drivers.  There are
+  both a <TT>MEGARAID</TT> and a <TT>MEGARAID2</TT>; we need megaraid2.
+  The megaraid2 driver eventually made its way into linux-2.6.  Be sure
+  to run linux-2.6.9-rc2 or newer, and set
+  <TT>CONFIG_MEGARAID_NEWGEN</TT> (in menuconfig, ``LSI Logic New
+  Generation RAID Device Drivers (NEW)''),
+  <TT>CONFIG_MEGARAID_MM</TT>, and <TT>CONFIG_MEGARAID_MAILBOX</TT>
+
+<P>
+</LI>
+<LI>Put the PowerVault enclosure in <SPAN  CLASS="textit">cluster mode</SPAN>.  To do so,
+  flip the little switch on the back of the PowerVault to the position
+  with the linked SCSI symbols.  This is different from putting the
+  controller into cluster mode, which you must also do and is described
+  later on.
+
+<P>
+</LI>
+<LI>Turn on the storage and the servers at about the same time or
+  weird delays happen
+
+<P>
+</LI>
+<LI>There were two SCSI cards in the back of the PowerEdge. I plugged the
+  PowerVault into the 2nd (top) card, channel 1.
+
+<P>
+</LI>
+<LI>There are some command-line tools you can download from Dell's
+  site to configure storage volumes under Linux, but they are unable to
+  do things like enabling "cluster mode" and changing SCSI id numbers.
+  Also, they don't work so hot at configuring storage volumes, but that
+  could have just been because the PowerVault was in a weird state.
+  Still, it's probably best to set up the PowerVault from the BIOS as
+  outlined below and avoid the command-line tools if possible.
+
+<P>
+</LI>
+<LI>Instead of using the command-line tools, configure through the
+  bios: hit Ctrl-M when on bootup when prompted to do so.  Once in the
+  setup program, enable cluster mode:
+  Objects <SPAN CLASS="MATH"><IMG
+ WIDTH="22" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$\rightarrow$"></SPAN> Adapter <SPAN CLASS="MATH"><IMG
+ WIDTH="22" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$\rightarrow$"></SPAN> Cluster Mode <SPAN CLASS="MATH"><IMG
+ WIDTH="22" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$\rightarrow$"></SPAN>
+  Enabled.  Also disable the PERC BIOS: that's in the Objects
+  <SPAN CLASS="MATH"><IMG
+ WIDTH="22" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$\rightarrow$"></SPAN> Adapter menu too.  See the manual for more things you
+  can tweak.  The utility lists all the important keystrokes at the
+  bottom of the screen.  Not exactly intuitive, but at least they are
+  documented. For more information, see
+  http://docs.us.dell.com/docs/storage/perc3dc/ug/en/index.htm ,
+  particularly the ``BIOS Configuration Utility'' chapter.
+
+<P>
+</LI>
+<LI>If toggle on the back of the PowerVault is in cluster mode, and you
+  haven't disabled the PERC BIOS and put the NVRAM into cluster mode,
+  ``weird stuff'' happens.   I'm not really sure what i did to make it go
+  away, but it involved a lot of futzing around with cables and that
+  toggle on the back and rebooting nodes. 
+
+<P>
+</LI>
+<LI>The GigE chips in the PowerEdge machines don't need a crossover cable:
+  they'll figure out how to talk to each other if you plug a
+  straight-through or crossover cable between them.  I'm going to say
+  ``crossover cable'' a lot in this document out of habit.  When I say
+  ``crossover'' I mean ``either crossover or straight-through''.
+
+<P>
+</LI>
+<LI>Node failover has one particularly sticky corner case that can
+  really mess things up.  If one node (A) thinks the other (B) died, A
+  will start taking over B's operations.  If B didn't actually die, but
+  just got hung up for a time, it will continue as if everything is OK.
+  Then you have both A and B thinking they control the file system,
+  both will write to it, and the result is a corrupted file system. A
+  100% legitimate failover configuration would take measures so that
+  one node can ``fence'' a node - ensure that it will not attempt to
+  access the storage until forgetting all state.  The most common way to
+  do so is to Shoot The Other Node In The Head (STONITH), and the most
+  common way to STONITH is via network-addressable power supplies.  You
+  can get away without a STONITH mechanism, and we're going to outline
+  just such a configuration, but just because you  <EM>can</EM> do something
+  doesn't mean you necessarily <EM>should</EM> do it.  
+
+<P>
+</LI>
+<LI>NOTE: the heartbeat software will set up IP addresses and mount file
+  systems.  The nodes will have a private (192.168.1.x) address for
+  heartbeat, a fixed IP address for maintenance, and one or two
+  'cluster' IP addresses which heartbeat will bind to an aliased
+  interface.  Be sure that your shared file system is not in /etc/fstab
+  and your network configuration scripts do not bring up the shared
+  cluster IP addresses.  
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION00032000000000000000">
+<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">2</SPAN> PVFS2</A>
+</H2>
+
+<P>
+Partition and make a file system on the PowerVault.  If you're going to
+set up Active-Active, make two partitions, else make one.  Mount the
+filesystem somewhere, but don't add an entry to /etc/fstab: heartbeat
+will take care of mounting it once you have things set up, and we are
+mounting the file system just long enough to put a PVFS2 storage space
+on it.  Reboot the other node to make sure it sees the new partition
+information on the enclosure.
+
+<P>
+Download, build, install, and configure PVFS2.  PVFS2 can work in a
+failover environment as long as the clients and servers are version
+0.5.0 or newer (Version 0.5.0 introduced the ability to retry failed
+operations). In this document, we have configured both PVFS2 server to
+act as both a Metadata and a Data server.  Since the config files and
+storage device are shared between both nodes of this cluster, it is not
+strictly necessary to configure the servers for both roles. Create a
+storage space on the PowerVault filesystem.  Now shutdown PVFS2 and
+unmount the file system.  
+
+<P>
+
+<H2><A NAME="SECTION00033000000000000000">
+<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">3</SPAN> Failover Software</A>
+</H2>
+
+<P>
+There are two main failover packages.  I went with heartbeat from
+linux-ha.org.  There is another package called ``kimberlite'', but it
+seems to have bitrotted.  While it has excellent documentation, it
+requires a 'quorum' partition, which the two nodes will write to using
+raw devices.  At some point, something scrambled the main (not raw)
+partition, so I gave up on kimberlite.  
+
+<P>
+Heartbeat seems to work pretty well, once you can wrap your head around
+the config file.
+
+<P>
+NOTE: There is a newer version of heartbeat that uses XML-based config
+files.  The new version also understands older config files, so the
+information in this document should still work.  When using XML-based
+config files, however, heartbeat can provide a lot of additional
+features.  The older config files are left here for historical purposes
+until we add XML config files at some point in the future.
+
+<P>
+
+<H3><A NAME="SECTION00033100000000000000">
+<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">1</SPAN> ACTIVE-PASSIVE (A-P)</A>
+</H3>
+
+<P>
+The two nodes are configured as in Figure&nbsp;<A HREF="#fig:nodes">1</A>.  They have a
+private internal network for heartbeat, and a public IP address so
+people can log into them and perform maintenance tasks.
+
+<P>
+
+<DIV ALIGN="LEFT"><A NAME="fig:nodes"></A><A NAME="38"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 1:</STRONG>
+Simplified wiring diagram of a PVFS2 HA cluster</CAPTION>
+<TR><TD>
+<DIV ALIGN="LEFT">
+<IMG
+ WIDTH="330" HEIGHT="375" ALIGN="BOTTOM" BORDER="0"
+ SRC="img2.png"
+ ALT="\includegraphics[scale=0.75]{pvfs2-failover.eps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+There is a shared "cluster" IP address which is assigned to whichever
+node is active. 
+
+<P>
+Follow GettingStarted.{txt,html} to set up haresources and ha.cf.
+Heartbeat ships with a heavily commented set of config files:
+
+<UL>
+<LI>ha.cf: configures the heartbeat infrastructure itself.
+</LI>
+<LI>haresources: describes the actual resources which will migrate
+  from node to node.  'Resources' includes IP address, file system
+  partition, and service. 
+</LI>
+<LI>authkeys: sets up an authentication mechanism between two nodes.
+</LI>
+</UL>
+
+<P>
+Copy the ha.cf, haresources, and authkeys files shipped with heartbeat
+to the /etc/ha.d directory and edit them. The defaults are pretty
+reasonable to get started.  For a simple active-passive system
+there are only a few settings you need to adjust: see
+Figure&nbsp;<A HREF="#fig:haconfig">2</A>, Figure&nbsp;<A HREF="#fig:haresources">3</A>, and
+Figure&nbsp;<A HREF="#fig:authkeys">4</A> for examples.
+
+<P>
+
+<DIV ALIGN="LEFT"><A NAME="fig:haconfig"></A><A NAME="136"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 2:</STRONG>
+Minimal <TT>/etc/heartbeat/ha.cf</TT> file</CAPTION>
+<TR><TD><IMG
+ WIDTH="550" HEIGHT="420" BORDER="0"
+ SRC="img3.png"
+ ALT="\begin{figure}\begin{scriptsize}
+\begin{verbatim}..."></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV ALIGN="LEFT"><A NAME="fig:haresources"></A><A NAME="137"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 3:</STRONG>
+Minimal <TT>/etc/heartbeat/haresources</TT> file</CAPTION>
+<TR><TD><IMG
+ WIDTH="542" HEIGHT="253" BORDER="0"
+ SRC="img4.png"
+ ALT="\begin{figure}\begin{scriptsize}
+\begin{verbatim}..."></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV ALIGN="LEFT"><A NAME="fig:authkeys"></A><A NAME="138"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 4:</STRONG>
+Example <TT>/etc/heartbeat/authkeys</TT> file</CAPTION>
+<TR><TD><IMG
+ WIDTH="541" HEIGHT="144" BORDER="0"
+ SRC="img5.png"
+ ALT="\begin{figure}\begin{scriptsize}
+\begin{verbatim}..."></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV ALIGN="LEFT"><A NAME="fig:alias"></A><A NAME="139"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 5:</STRONG>
+<TT>ifconfig</TT> output with an aliased interface. <TT>eth0:0</TT> is
+an aliased interface for <TT>eth0</TT>.  <TT>eth1</TT> is a heartbeat channel,
+over which both nodes in the cluster can communicate their status to each
+other</CAPTION>
+<TR><TD><IMG
+ WIDTH="555" HEIGHT="328" BORDER="0"
+ SRC="img6.png"
+ ALT="\begin{figure}\begin{scriptsize}
+\begin{verbatim}eth0 Link encap:Ethernet HWad...
+...:156677942 (149.4 MiB)
+Interrupt:29\end{verbatim}
+\end{scriptsize}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+Now you've got heartbeat configured and you've described the resources.
+Fire up the ``heartbeat'' daemon (/etc/init.d/heartbeat start) on one
+node and see if all the resources start up (you should see an aliased
+interface bound to the cluster ip (see Figure&nbsp;<A HREF="#fig:alias">5</A>), the file system mounted, and the
+pvfs2 servers running).
+Ping the cluster IP from another machine.  If something is broken,
+consult the /var/log/ha-log file or /var/log/syslog and see if any of
+the scripts in /etc/ha.d/resource.d failed.
+
+<P>
+As the GettingStarted document puts it, if all goes well, you've got
+Availability (PVFS2 running on one node).  Verify by running pvfs2-ping
+or pvfs2-cp or mounting the PVFS2 file system from a client (not the
+servers: we're going to reboot them soon to test).  Now start heartbeat
+on the standby server.  Make sure that the IP address, the file system,
+and pvfs2 did not migrate to the standby node -  if you were to use the
+haresources file in Figure&nbsp;<A HREF="#fig:haresources">3</A>, the output of
+<TT>ifconfig</TT> should still look like Figure&nbsp;<A HREF="#fig:alias">5</A>, you
+would still have /dev/sdb3 mounted on /shared, and pvfs2-server would
+still be running. 
+
+<P>
+OK, the moment of truth.  Everything is in place: node A serving PVFS2
+requests, node B ready to step in.  Start a long-running process on the
+client (pvfs2-cp of a large file will work, as will unpacking a tarball
+onto a PVFS2 file system).  Kill node A somehow:  you could be as brutal
+as pulling the power cable, or as gentle as /etc/init.d/heartbeat stop.
+As the heartbeat docs note, don't just pull the network cables out: the
+heartbeat process on both nodes will assume the other process died and
+will attempt to recover.  Remember that ``takeover'' means taking over
+the IP address, file system, and programs, so you will have two nodes
+writing to the same file system and trying to share the same ip address.
+When you plug the network cables back in, you will have network
+collisions and simultaneous writes to the filesystem.  Yes this is
+different from stopping heartbeat and starting it up later: when
+heartbeat starts, it checks to see the state of its partner node, and
+will do the right thing. 
+
+<P>
+If the failover works correctly, heartbeat will migrate everything to
+node B, and the client won't notice a thing.   Congratulations, you've
+got High Availability.  To finish, bring A back up.  The resources which
+were on node B will migrate back to node A (if you set
+<TT>auto_failback</TT> to 'on' in ha.cf), and the client remains
+oblivious.
+
+<P>
+
+<H3><A NAME="SECTION00033200000000000000">
+<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">3</SPAN>.<SPAN CLASS="arabic">2</SPAN> Active-Active (A-A)</A>
+</H3>
+
+<P>
+
+<DIV ALIGN="LEFT"><A NAME="fig:nodes-aa"></A><A NAME="91"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 6:</STRONG>
+Simplified wiring diagram of a PVFS2 HA cluster, Active-Active
+configuration</CAPTION>
+<TR><TD>
+<DIV ALIGN="LEFT">
+<IMG
+ WIDTH="330" HEIGHT="359" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="\includegraphics[scale=0.75]{pvfs2-failover-AA.eps}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+If that wasn't exciting enough, we can do active-active, too.  It's
+pretty much like active-passive, except both nodes are pvfs2 servers.
+Instead of sharing one cluster IP, there will be two - one for each
+server.  Instead of sharing one file system, there will be two.  If A
+dies, B will serve it's data and A's data, and vice versa.  You get all
+the benefits of Active-Passive, but you don't have a server waiting idly
+for a (hopefully rare) failure.   Figure&nbsp;<A HREF="#fig:nodes-aa">6</A> depicts an
+Active-Active cluster.
+
+<P>
+As mentioned above, you'll need two partitions on the shared storage and
+two shared IP addresses.  configure PVFS2 on the two servers as you
+normally would, using the shared IP address.  Make sure both servers
+have both server-specific config files.  When one node dies, you'll have
+two instances of pvfs2-server running on a node, so you need to make
+some tweaks to the config file to ensure that can happen: 
+
+<P>
+
+<UL>
+<LI>delete the LogFile entry from fs.conf
+</LI>
+<LI>add a LogFile entry to the server-specific config file, making
+  	  sure each server gets a different log file
+</LI>
+<LI>the StorageSpace for each server must point to its own
+ 	  partition on the shared device.
+</LI>
+<LI>the HostID for each server must point to a unique port number.
+</LI>
+<LI>the Alias entry in the fs.conf must also match the HostID in
+	  the server-specific config file (make sure the port numbers
+	  match)
+</LI>
+</UL>
+
+<P>
+Heartbeat looks for startup/shutdown scripts in /etc/init.d and
+/etc/ha.d/resources.d .  Since we need to be able to, in the worst case,
+start up two pvfs2-servers, we'll need two scripts.  No sense
+polluting /etc/init.d:  go ahead and create pvfs2-1 and pvfs2-2 in the
+resources.d directory.  PVFS2 has an example script in
+examples/pvfs2-server.rc you can use to start.  Make sure PVFS2_FS_CONF
+and PVFS2_SERVER_CONF point to the proper config files (it will guess
+the wrong ones if you don't specify them) and PVFS2_PIDFILE is different
+in both scripts.  See Figure&nbsp;<A HREF="#fig:init">7</A> and
+Figure&nbsp;<A HREF="#fig:init-other">8</A>.
+
+<P>
+
+<DIV ALIGN="LEFT"><A NAME="fig:init"></A><A NAME="104"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 7:</STRONG>
+Excerpt from PVFS2 init script on one A-A node</CAPTION>
+<TR><TD><IMG
+ WIDTH="532" HEIGHT="148" BORDER="0"
+ SRC="img8.png"
+ ALT="\begin{figure}\begin{scriptsize}
+\begin{verbatim}PVFS2_FS_CONF=/etc/pvfs2/fs.c...
+....  ..."></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV ALIGN="LEFT"><A NAME="fig:init-other"></A><A NAME="112"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 8:</STRONG>
+Excerpt from PVFS2 init script on the other A-A node</CAPTION>
+<TR><TD><IMG
+ WIDTH="532" HEIGHT="148" BORDER="0"
+ SRC="img9.png"
+ ALT="\begin{figure}\begin{scriptsize}
+\begin{verbatim}PVFS2_FS_CONF=/etc/pvfs2/fs.c...
+....  ..."></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV ALIGN="LEFT"><A NAME="fig:haresources-aa"></A><A NAME="120"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 9:</STRONG>
+haresources file, Active-Active configuration</CAPTION>
+<TR><TD><IMG
+ WIDTH="541" HEIGHT="132" BORDER="0"
+ SRC="img10.png"
+ ALT="\begin{figure}\begin{scriptsize}
+\begin{verbatim}..."></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+The ha.cf file looks the same in A-A as it does in A-P, as does the
+authkeys.  We only have to add an entry to haresources indicating that
+heartbeat needs to manage two separate resources.  See
+Figure&nbsp;<A HREF="#fig:haresources-aa">9</A>.
+
+<P>
+Start heartbeat on both machines.  See if a client can reach the servers
+(e.g. pvfs2-ping).  Kill a machine.  The resources that were on that
+machine (IP address, file system, pvfs2-servers) will migrate to the
+machine that is still up.  Clients won't notice a thing.
+Figure&nbsp;<A HREF="#fig:ifconfig-aa">10</A> shows node A after node B goes down.  Node A
+now has both of the two cluster IP addresses bound to two aliased
+interfaces B while continuing to manage it's default resource.
+
+<P>
+
+<DIV ALIGN="LEFT"><A NAME="fig:ifconfig-aa"></A><A NAME="140"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 10:</STRONG>
+<TT>ifconfig</TT> output.  This node now has both cluster IP
+addresses .</CAPTION>
+<TR><TD><IMG
+ WIDTH="578" HEIGHT="404" BORDER="0"
+ SRC="img11.png"
+ ALT="\begin{figure}\begin{scriptsize}
+\begin{verbatim}eth0 Link encap:Ethernet HWad...
+...:158334802 (150.9 MiB)
+Interrupt:29\end{verbatim}
+\end{scriptsize}
+\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H1><A NAME="SECTION00040000000000000000">
+<SPAN CLASS="arabic">4</SPAN> Acknowledgments</A>
+</H1>
+We would like to thank Jasmina Janic for notes and technical support.
+The Dell Scalable Systems Group loaned the PVFS2 development team Dell
+hardware.  With this hardware, we were able to evaluate several high
+availability solutions and verify PVFS2's performance in that
+environment.  This document would not be possible without their
+assistance.
+
+<H1><A NAME="SECTION00050000000000000000">
+About this document ...</A>
+</H1>
+ <STRONG>PVFS2 High-Availability Clustering</STRONG><P>
+This document was generated using the
+<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 2002-2-1 (1.71)
+<P>
+Copyright &#169; 1993, 1994, 1995, 1996,
+Nikos Drakos, 
+Computer Based Learning Unit, University of Leeds.
+<BR>
+Copyright &#169; 1997, 1998, 1999,
+<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
+Mathematics Department, Macquarie University, Sydney.
+<P>
+The command line arguments were: <BR>
+ <STRONG>latex2html</STRONG> <TT>-split 0 -show_section_numbers -nonavigation -init_file /tmp/pvfs-2.8.2/doc/latex2html-init pvfs2-ha.tex</TT>
+<P>
+The translation was initiated by Samuel Lang on 2010-02-04
+<BR><HR>
+<ADDRESS>
+Samuel Lang
+2010-02-04
+</ADDRESS></table></table></table><?include("../../../../bottom.php"); ?>
+</BODY>
+</HTML>
