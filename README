@@ -1,14 +1,18 @@
-This is readme file of SALB.
+This is a README file of SALB.
 
 
-All source codes and documents in this repository are only used for academical communication.
+This repository contain the source code of PVFS2 with the SALB algorithm.
+All source codes and documents in this repository are only used for academic exchanges, not for commercial activities.
 
-This source code repository contain the source code of PVFS2 with the SALB algorithm.
-To compile PVFS2 with SALB algorithm, you need to install GNU Scientific Library (GSL)  -- development package
-For example, for a Debian distribution: apt-get install libgsl0-dev 
 
+To compile PVFS2 with SALB algorithm, you need to install GNU Scientific Library development package
+For example, on a Debian distribution, you can use: apt-get install libgsl0-dev 
+For the README file of PVFS2, you can read README.PVFS2
 
 More documentations is under development.
+However, you can find some details of SALB in PVFS2 in our paper:
+
+Bin Dong, Xiuqiao Li, Limin Xiao, Li Ruan, and Binbin Yu. 2010. Self-Acting Load Balancing with Parallel Sub File Migration for Parallel File System. In Proceedings of the 2010 Third International Joint Conference on Computational Science and Optimization - Volume 02 (CSO '10), Vol. 2. IEEE Computer Society, Washington, DC, USA, 317-321. 
 
 Any questions, you can contact
 Bin Dong at goon83@126.com or Bondg@cse.buaa.edu.cn
